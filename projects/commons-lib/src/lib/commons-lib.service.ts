@@ -12,8 +12,10 @@ export class CommonsLibService {
 
   signIn(user: IUser): void {
     this._user = user;
+    const accessToken = '1234567890';
+    this.auth.accessToken = accessToken;
     localStorage.setItem('user', JSON.stringify(this._user));
-    localStorage.setItem('accessToken', '1234567890');
+    localStorage.setItem('accessToken', accessToken);
   }
 
   signOut(): void {

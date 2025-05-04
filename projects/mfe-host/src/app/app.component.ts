@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CommonsLibService } from '@commons-lib';
 
 @Component({
   selector: 'app-root',
@@ -10,5 +9,4 @@ import { CommonsLibService } from '@commons-lib';
 })
 export class AppComponent {
   title = 'mfe-host';
-  constructor(public commonsLibService: CommonsLibService) {}
 }
