@@ -4,12 +4,14 @@ module.exports = withModuleFederationPlugin({
 
   name: 'mfe-host',
 
-  exposes: {
-    './Component': './projects/mfe-host/src/app/app.component.ts',
+  remotes: {
+    mfAuth: "http://localhost:4201"
   },
 
   shared: {
     ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
   },
+
+  sharedMappings: ["@commons-lib"],
 
 });
