@@ -12,17 +12,16 @@ export class CommonsLibService {
 
   signIn(user: IUser): void {
     this._user = user;
-    this.auth = { accessToken: '1234567890' };
     localStorage.setItem('user', JSON.stringify(this._user));
+    localStorage.setItem('accessToken', '1234567890');
   }
 
   signOut(): void {
     this._user = { username: '', email: '', password: '' };
-    this.auth = { accessToken: '' };
     localStorage.clear();
   }
 
   validateLogin(): boolean {
-    return !!this.auth.accessToken;
+    return !!localStorage.getItem('accessToken');
   }
 }

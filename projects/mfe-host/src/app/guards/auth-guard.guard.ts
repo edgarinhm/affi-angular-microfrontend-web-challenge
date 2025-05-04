@@ -10,6 +10,7 @@ export const authGuardGuard: CanActivateFn = (route, state) => {
   const isLoggedIn = commonsLibService.validateLogin();
   if (!isLoggedIn) {
     router.navigate(['/login']);
+    return false;
   }
   return isLoggedIn;
 };
