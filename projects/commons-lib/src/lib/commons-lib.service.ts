@@ -21,4 +21,8 @@ export class CommonsLibService {
     this.auth = { accessToken: '' };
     localStorage.clear();
   }
+
+  validateLogin(): boolean {
+    return !!this.auth.accessToken;
+  }
 }
