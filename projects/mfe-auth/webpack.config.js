@@ -5,11 +5,13 @@ module.exports = withModuleFederationPlugin({
   name: 'mfe-auth',
 
   exposes: {
-    './Component': './projects/mfe-auth/src/app/app.component.ts',
+    './AuthComponent': './projects/mfe-auth/src/app/app.component.ts',
   },
 
   shared: {
     ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
   },
+
+  sharedMappings: ["@commons-lib"],
 
 });
