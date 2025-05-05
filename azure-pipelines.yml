@@ -1,0 +1,64 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+    
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
+- task: Cache@2
+  inputs:
+    key: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
+    path: '$(Build.SourcesDirectory)/node_modules'
+    cacheHitVar: CacheRestored
+  displayName: 'Cache Npm Dependencies'
+
+- script: |
+    npm install -g @angular/cli
+    npm install
+  condition: ne(variables['CacheRestored'], 'true')
+  displayName: 'Install dependencies'
+
+- script: npm run build-prod:mfe-host
+  displayName: 'Build angular mfe-host app'
+
+# - task: PublishBuildArtifacts@1
+#   condition: always()
+#   continueOnError: true
+#   inputs:
+#     pathtoPublish: 'dist/mfe-host'
+#     artifactName: 'drop'
+#     publishLocation: 'Container'
+#   displayName: 'Publish build artifacts'
+
+- powershell: |
+    $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/mfe-host"
+    Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
+
+# archive and publish artifacts
+- task: ArchiveFiles@2
+  displayName: Archive Build Artifacts
+  condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
+  continueOnError: true
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/mfe-host'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: $(Build.ArtifactStagingDirectory)/build/$(Build.BuildId).zip
+- task: PublishBuildArtifacts@1
+  displayName: Publish Build Artifacts
+  condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
+  continueOnError: true
+  inputs:
+    pathtoPublish: $(Build.ArtifactStagingDirectory)/build/$(Build.BuildId).zip
+    artifactName: 'drop'
