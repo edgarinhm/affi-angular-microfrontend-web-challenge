@@ -7,7 +7,15 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "run:all": "node node_modules/@angular-architects/module-federation/src/server/mf-dev-server.js"
+    "run:all": "node node_modules/@angular-architects/module-federation/src/server/mf-dev-server.js",
+    "mfe-host": "ng s mfe-host",
+    "build-prod:mfe-host": "ng build mfe-host --configuration=production --output-hashing=all",
+    "build-staging:mfe-host": "ng build mfe-host --configuration=stage --output-hashing=all",
+    "build-qa:mfe-host": "ng build mfe-host --configuration=qa --output-hashing=all",
+    "mfe-auth": "ng s mfe-auth",
+    "build-prod:mfe-auth": "ng build mfe-auth --configuration=production --output-hashing=all",
+    "build-staging:mfe-auth": "ng build mfe-auth --configuration=stage --output-hashing=all",
+    "build-qa:mfe-auth": "ng build mfe-auth --configuration=qa --output-hashing=all"
   },
   "private": true,
   "dependencies": {
