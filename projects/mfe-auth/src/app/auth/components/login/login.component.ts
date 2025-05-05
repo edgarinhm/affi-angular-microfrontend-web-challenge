@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 import {
-  FormControl,
+  FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -10,25 +11,34 @@ import { CommonsLibService, IUser } from '@commons-lib';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   private readonly router = inject(Router);
   commonsLibService = inject(CommonsLibService);
+  loginForm!: FormGroup;
+  formValidity = signal(false);
 
-  loginForm = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/[a-z0-9\._%\+\-]+@[a-z0-9\.\-]+\.[a-z]{2,}$/),
-    ]),
-    password: new FormControl('', [Validators.required]),
-  });
+  constructor(private readonly fb: FormBuilder) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
+
+    this.loginForm.statusChanges.subscribe({
+      next: (status) => {
+        this.formValidity.set(status === 'VALID');
+      },
+    });
+  }
 
   onSubmit() {
-    const user = { ...this.loginForm.value };
-    this.commonsLibService.signIn(user as IUser);
-    this.router.navigate(['/']);
+    if (this.formValidity()) {
+      const user = { ...this.loginForm.value };
+      this.commonsLibService.signIn(user as IUser);
+      this.router.navigate(['/']);
+    }
   }
 }
