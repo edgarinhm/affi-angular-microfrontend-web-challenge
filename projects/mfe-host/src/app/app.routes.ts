@@ -22,4 +22,8 @@ export const routes: Routes = [
     loadComponent: () =>
       import('mfeAuth/AuthRegister').then((m) => m.RegisterComponent),
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

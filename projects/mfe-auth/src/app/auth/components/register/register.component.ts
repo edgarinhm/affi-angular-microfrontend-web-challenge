@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 import {
-  FormControl,
+  FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -10,38 +11,33 @@ import { CommonsLibService, IUser } from '@commons-lib';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
   private readonly router = inject(Router);
   commonsLibService = inject(CommonsLibService);
+  formValidity = signal(false);
+  registerForm!: FormGroup;
 
-  registerForm = new FormGroup({
-    username: new FormControl('', [Validators.required]),
-    email: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/[a-z0-9\._%\+\-]+@[a-z0-9\.\-]+\.[a-z]{2,}$/),
-    ]),
-    password: new FormControl('', [Validators.required]),
-  });
+  constructor(private readonly fb: FormBuilder) {
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
+
+    this.registerForm.statusChanges.subscribe({
+      next: (status) => {
+        this.formValidity.set(status === 'VALID');
+      },
+    });
+  }
 
   onSubmit() {
     const user = { ...this.registerForm.value };
     this.commonsLibService.signIn(user as IUser);
     this.router.navigate(['/']);
-  }
-
-  get username() {
-    return this.registerForm.controls['username'];
-  }
-
-  get email() {
-    return this.registerForm.controls['email'];
-  }
-
-  get password() {
-    return this.registerForm.controls['password'];
   }
 }

@@ -1,10 +1,11 @@
 <div class="limiter">
   <div class="container-login100">
+    <!-- Regisger Form -->
     <div class="wrap-login100">
       <form
-        class="login100-form validate-form"
         [formGroup]="registerForm"
         (ngSubmit)="onSubmit()"
+        class="login100-form validate-form"
       >
         <span class="login100-form-title p-b-26"> Register </span>
         <span class="login100-form-title p-b-48">
@@ -19,12 +20,21 @@
             formControlName="username"
           />
           <span class="focus-input100" data-placeholder="Username"></span>
+          <div
+            *ngIf="
+              registerForm.get('username')?.invalid &&
+              (registerForm.get('username')?.touched ||
+                registerForm.get('username')?.dirty)
+            "
+            class="text-danger"
+          >
+            <small *ngIf="registerForm.get('username')?.errors?.['required']"
+              >Username is required.</small
+            >
+          </div>
         </div>
 
-        <div
-          class="wrap-input100 validate-input"
-          data-validate="Valid email is: a@b.c"
-        >
+        <div class="wrap-input100 validate-input">
           <input
             class="input100"
             type="text"
@@ -32,12 +42,21 @@
             formControlName="email"
           />
           <span class="focus-input100" data-placeholder="Email"></span>
+          <div
+            *ngIf="
+              registerForm.get('email')?.invalid &&
+              (registerForm.get('email')?.touched ||
+                registerForm.get('email')?.dirty)
+            "
+            class="text-danger"
+          >
+            <small *ngIf="registerForm.get('email')?.errors?.['required']"
+              >Email is required.</small
+            >
+          </div>
         </div>
 
-        <div
-          class="wrap-input100 validate-input"
-          data-validate="Enter password"
-        >
+        <div class="wrap-input100 validate-input">
           <span class="btn-show-pass">
             <i class="zmdi zmdi-eye"></i>
           </span>
@@ -48,12 +67,30 @@
             formControlName="password"
           />
           <span class="focus-input100" data-placeholder="Password"></span>
+          <div
+            *ngIf="
+              registerForm.get('password')?.invalid &&
+              (registerForm.get('password')?.touched ||
+                registerForm.get('password')?.dirty)
+            "
+            class="text-danger"
+          >
+            <small *ngIf="registerForm.get('password')?.errors?.['required']"
+              >Password is required.</small
+            >
+          </div>
         </div>
 
         <div class="container-login100-form-btn">
           <div class="wrap-login100-form-btn">
             <div class="login100-form-bgbtn"></div>
-            <button class="login100-form-btn">Create account</button>
+            <button
+              type="submit"
+              class="login100-form-btn"
+              [disabled]="!formValidity()"
+            >
+              Create account
+            </button>
           </div>
         </div>
 
