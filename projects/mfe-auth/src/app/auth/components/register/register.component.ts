@@ -28,15 +28,14 @@ export class RegisterComponent {
       password: ['', [Validators.required]],
     });
 
-    this.registerForm.statusChanges.subscribe({
-      next: (status) => {
-        this.formValidity.set(status === 'VALID');
-      },
+    // Subscribe to form-level status changes
+    this.registerForm.statusChanges.subscribe(() => {
+      this.formValidity.set(this.registerForm.valid);
     });
   }
 
   onSubmit() {
-    if (this.formValidity()) {
+    if (this.registerForm.valid) {
       const user = { ...this.registerForm.value };
       this.commonsLibService.signIn(user as IUser);
       this.router.navigate(['/']);

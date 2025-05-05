@@ -27,15 +27,14 @@ export class LoginComponent {
       password: ['', [Validators.required]],
     });
 
-    this.loginForm.statusChanges.subscribe({
-      next: (status) => {
-        this.formValidity.set(status === 'VALID');
-      },
+    // Subscribe to form-level status changes
+    this.loginForm.statusChanges.subscribe(() => {
+      this.formValidity.set(this.loginForm.valid);
     });
   }
 
   onSubmit() {
-    if (this.formValidity()) {
+    if (this.loginForm.valid) {
       const user = { ...this.loginForm.value };
       this.commonsLibService.signIn(user as IUser);
       this.router.navigate(['/']);
