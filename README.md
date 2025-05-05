@@ -1,6 +1,120 @@
-# AffiAngularChallengeWorkspace
+# Demo Microfront Angular 19 with Module Federate - Mono Repo approach (projects in one workspace)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+This project uses Angular version 19.0.6 and NodeJS version 22.12.0.
+
+We'll create the workspace.
+
+```console
+ng new affi-angular-challenge-workspace --create-application=false
+```
+
+Enter the workspace
+
+```console
+cd affi-angular-challenge-workspace
+```
+
+We will create the following projects:
+
+## mfe-host
+
+This project will be our microfrontend **container**.
+
+```console
+ng g application mfe-host --style=scss --routing=true
+```
+
+## mfe-auth
+
+```console
+ng g application mfe-auth --style=scss --routing=true
+```
+
+## Enabling module federation for Angular projects
+
+The **@angular-architects/module-federation** package provides a custom generator. If you'd like to learn more about this library and Angular architecture, visit the following link:
+<https://www.angulararchitects.io/en/aktuelles/the-microfrontend-revolution-module-federation-in-webpack-5/>
+
+We add the library to each of the projects
+Once the library is installed, we will add the use of Module Federation to our MF (microfrontends) and add some configurations:
+
+```console
+ng add @angular-architects/module-federation --project mfe-host --port 4200 --type host
+ng add @angular-architects/module-federation --project mfe-auth --port 4201 --type remote
+```
+
+Commons lib (optional):
+
+```console
+ng g library commons-lib
+```
+
+We are require to modifiy commons lib path to add "projects" directory:
+
+file **tsconfig.json**
+
+```json
+"paths": {
+      "@commons-lib": ["./projects/commons-lib/src/public-api.ts"]
+    },
+```
+
+We are require to create custom microfrontend declaration and add each remote module path name:
+**projects\mfe-host\src\custom-mfe-decl.d.ts**
+
+```javascript
+declare module 'mfeAuth/*';
+```
+
+Okay, what this command will do is create some **webpack.config.js** files in each of our MFs to be able to use the module federation.
+
+Then it's just a matter of configuring the **remote** and **host** MFs.
+
+Example configuration for the auth MF:
+
+```javascript
+const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+
+module.exports = withModuleFederationPlugin({
+
+  name: 'mfe-auth',
+
+  exposes: {
+    './AuthLogin': './projects/mfe-auth/src/app/auth/components/login/login.component.ts',
+    './AuthRegister': './projects/mfe-auth/src/app/auth/components/register/register.component.ts',
+  },
+
+  shared: {
+    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  },
+
+  sharedMappings: ["@commons-lib"],
+
+});
+```
+
+Example configuration for the host MF:
+
+```javascript
+const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+
+module.exports = withModuleFederationPlugin({
+
+  name: 'mfe-host',
+
+  remotes: {
+    mfeAuth: "http://localhost:4201/remoteEntry.js",
+  },
+
+  shared: {
+    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  },
+
+  sharedMappings: ["@commons-lib"],
+
+});
+
+```
 
 ## Development server
 
