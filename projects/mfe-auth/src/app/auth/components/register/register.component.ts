@@ -36,8 +36,10 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-    const user = { ...this.registerForm.value };
-    this.commonsLibService.signIn(user as IUser);
-    this.router.navigate(['/']);
+    if (this.formValidity()) {
+      const user = { ...this.registerForm.value };
+      this.commonsLibService.signIn(user as IUser);
+      this.router.navigate(['/']);
+    }
   }
 }
