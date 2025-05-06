@@ -4,7 +4,15 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-  - main
+  branches:
+    includes:
+      - main
+  paths:
+    include:
+      - "projects/mfe-host/*"
+
+pool:
+  vmImage: ubuntu-latest
 
 variables:
   nodeVersion: "22.x"
@@ -15,13 +23,6 @@ variables:
   appArtifactName: "mfe-host"
   appBuildCommandDev: "npm run build:mfe-host -- --configuration=development"
   appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
-
-paths:
-  include:
-    - "${{ variables.appPath }}/*"
-
-pool:
-  vmImage: ubuntu-latest
 
 steps:
   - task: NodeTool@0
