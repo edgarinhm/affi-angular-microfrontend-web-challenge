@@ -9,8 +9,8 @@ trigger:
       - main
   paths:
     include:
-    - "mfe-host/*"
-  
+      - "mfe-host/*"
+
 pool:
   vmImage: ubuntu-latest
 
@@ -30,6 +30,8 @@ steps:
     displayName: "Install Node.js"
 
   - task: Cache@2
+    dependsOn:
+      - NodeTool@0
     inputs:
       key: "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"
       path: "$(Build.SourcesDirectory)/node_modules"
@@ -61,7 +63,9 @@ steps:
       Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
 
   # archive and publish artifacts
-  - task: ArchiveFiles@2
+  - task: Cache@2
+    dependsOn:
+      - NodeTool@0
     displayName: Archive Build Artifacts
     condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
     continueOnError: true
@@ -70,7 +74,9 @@ steps:
       includeRootFolder: false
       archiveType: "zip"
       archiveFile: $(Build.ArtifactStagingDirectory)/build/${variables.appArtifactName}-$(Build.BuildId)-prod.zip
-  - task: PublishBuildArtifacts@1
+  - task: Cache@2
+    dependsOn:
+      - NodeTool@0
     displayName: Publish Build Artifacts
     condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
     continueOnError: true

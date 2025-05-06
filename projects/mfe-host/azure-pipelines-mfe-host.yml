@@ -31,6 +31,8 @@ steps:
     displayName: "Install Node.js"
 
   - task: Cache@2
+    dependsOn:
+      - NodeTool@0
     inputs:
       key: "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"
       path: "$(Build.SourcesDirectory)/node_modules"
@@ -63,6 +65,8 @@ steps:
 
   # archive and publish artifacts
   - task: ArchiveFiles@2
+    dependsOn:
+      - Cache@2
     displayName: Archive Build Artifacts
     condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
     continueOnError: true
@@ -72,6 +76,8 @@ steps:
       archiveType: "zip"
       archiveFile: $(Build.ArtifactStagingDirectory)/build/${variables.appArtifactName}-$(Build.BuildId)-prod.zip
   - task: PublishBuildArtifacts@1
+    dependsOn:
+      - ArchiveFiles@2
     displayName: Publish Build Artifacts
     condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
     continueOnError: true
