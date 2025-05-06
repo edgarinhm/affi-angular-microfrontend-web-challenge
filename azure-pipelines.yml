@@ -13,12 +13,12 @@ variables:
   nodeVersion: "22.x"
   npmRegistryURL: "https://registry.npmjs.org/"
   # Define your apps here
-  appMfeHost: "mfe-host"
+  appMfeHostname: "mfe-host"
   appMfeHostpath: "projects/mfe-host"
   appMfeHostartifactName: "mfe-host"
   appMfeHostbuildCommandDev: "npm run build:mfe-host -- --configuration=development"
   appMfeHostbuildCommandProd: "npm run build:mfe-host -- --configuration=production"
-  appMfeAuth: "mfe-auth"
+  appMfeAuthname: "mfe-auth"
   appMfeAuthpath: "projects/mfe-auth"
   appMfeAuthartifactName: "mfe-auth"
   appMfeAuthbuildCommandDev: "npm run build:mfe-auth -- --configuration=development"
@@ -46,7 +46,7 @@ steps:
   - script: ${{ variables.appMfeHostbuildCommandProd }}
     displayName: "Build ${{ variables.appMfeHostname }} Prod"
     env:
-       MFE_AUTH_URL: $(MFE_AUTH_URL)
+      MFE_AUTH_URL: $(MFE_AUTH_URL)
 
   # - task: PublishBuildArtifacts@1
   #   condition: always()
@@ -58,7 +58,7 @@ steps:
   #   displayName: 'Publish build artifacts'
 
   - powershell: |
-      $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/mfe-host"
+      $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/${{ variables.appMfeHostpath }}"
       Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
 
   # archive and publish artifacts
@@ -67,14 +67,14 @@ steps:
     condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
     continueOnError: true
     inputs:
-      rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/mfe-host"
+      rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${variables.appMfeHostpath}"
       includeRootFolder: false
       archiveType: "zip"
-      archiveFile: $(Build.ArtifactStagingDirectory)/build/$(Build.BuildId).zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/build/${variables.appMfeHostartifactName}-$(Build.BuildId)-prod.zip
   - task: PublishBuildArtifacts@1
     displayName: Publish Build Artifacts
     condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
     continueOnError: true
     inputs:
-      pathtoPublish: $(Build.ArtifactStagingDirectory)/build/$(Build.BuildId).zip
+      pathtoPublish: $(Build.ArtifactStagingDirectory)/build/${variables.appMfeHostartifactName}-$(Build.BuildId)-prod.zip
       artifactName: "drop"
