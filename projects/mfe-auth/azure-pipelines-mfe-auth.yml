@@ -4,24 +4,24 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-  - main
+  branches:
+    include:
+      - main
+  paths:
+    include:
+    - "mfe-host/*"
+  
+pool:
+  vmImage: ubuntu-latest
 
 variables:
   nodeVersion: "22.x"
   npmRegistryURL: "https://registry.npmjs.org/"
-  # Define your apps here
-  appName: "mfe-auth"
-  appPath: "projects/mfe-auth"
-  appArtifactName: "mfe-auth"
-  appBuildCommandDev: "npm run build:mfe-auth -- --configuration=development"
-  appBuildCommandProd: "npm run build:mfe-auth -- --configuration=production"
-
-paths:
-  include:
-    - "${{ variables.appPath }}/*"
-
-pool:
-  vmImage: ubuntu-latest
+  appName: "mfe-host"
+  appPath: "projects/mfe-host"
+  appArtifactName: "mfe-host"
+  appBuildCommandDev: "npm run build:mfe-host -- --configuration=development"
+  appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
 
 steps:
   - task: NodeTool@0
@@ -46,6 +46,15 @@ steps:
     displayName: "Build ${{ variables.appName }} Prod"
     env:
       MFE_AUTH_URL: $(MFE_AUTH_URL)
+
+  # - task: PublishBuildArtifacts@1
+  #   condition: always()
+  #   continueOnError: true
+  #   inputs:
+  #     pathtoPublish: 'dist/mfe-host'
+  #     artifactName: 'drop'
+  #     publishLocation: 'Container'
+  #   displayName: 'Publish build artifacts'
 
   - powershell: |
       $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/${{ variables.appPath }}"
