@@ -12,20 +12,17 @@ pool:
 variables:
   nodeVersion: "22.x"
   npmRegistryURL: "https://registry.npmjs.org/"
-
   # Define your apps here
-  appMfeHost:
-    - name: "mfe-host"
-      path: "projects/mfe-host"
-      artifactName: "mfe-host"
-      buildCommandDev: "npm run build:mfe-host -- --configuration=development"
-      buildCommandProd: "npm run build:mfe-host -- --configuration=production"
-  appMfeAuth:
-    - name: "mfe-auth"
-      path: "projects/mfe-auth"
-      artifactName: "mfe-auth"
-      buildCommandDev: "npm run build:mfe-auth -- --configuration=development"
-      buildCommandProd: "npm run build:mfe-auth -- --configuration=production"
+  appMfeHost: "mfe-host"
+  appMfeHostpath: "projects/mfe-host"
+  appMfeHostartifactName: "mfe-host"
+  appMfeHostbuildCommandDev: "npm run build:mfe-host -- --configuration=development"
+  appMfeHostbuildCommandProd: "npm run build:mfe-host -- --configuration=production"
+  appMfeAuth: "mfe-auth"
+  appMfeAuthpath: "projects/mfe-auth"
+  appMfeAuthartifactName: "mfe-auth"
+  appMfeAuthbuildCommandDev: "npm run build:mfe-auth -- --configuration=development"
+  appMfeAuthbuildCommandProd: "npm run build:mfe-auth -- --configuration=production"
 
 steps:
   - task: NodeTool@0
@@ -46,11 +43,10 @@ steps:
     condition: ne(variables['CacheRestored'], 'true')
     displayName: "Install dependencies"
 
-  - ${{ each app in variables.appMfeHost }}:
-  - script: |
-      export MFE_AUTH_URL=$(MFE_AUTH_URL)
-      ${{ app.buildCommandProd }}
-    displayName: "Build ${{ app.name }} Prod"
+  - script: ${{ variables.appMfeHostbuildCommandProd }}
+    displayName: "Build ${{ variables.appMfeHostname }} Prod"
+    env:
+       MFE_AUTH_URL: $(MFE_AUTH_URL)
 
   # - task: PublishBuildArtifacts@1
   #   condition: always()
@@ -61,7 +57,7 @@ steps:
   #     publishLocation: 'Container'
   #   displayName: 'Publish build artifacts'
 
-  - powermfe-host: |
+  - powershell: |
       $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/mfe-host"
       Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
 
