@@ -9,17 +9,13 @@
     "test": "ng test",
     "run:all": "node node_modules/@angular-architects/module-federation/src/server/mf-dev-server.js",
     "mfe-host": "ng s mfe-host",
-    "build-prod:mfe-host": "ng build mfe-host --configuration=production --output-hashing=all",
-    "build-staging:mfe-host": "ng build mfe-host --configuration=stage --output-hashing=all",
-    "build-qa:mfe-host": "ng build mfe-host --configuration=qa --output-hashing=all",
     "mfe-auth": "ng s mfe-auth",
-    "build-prod:mfe-auth": "ng build mfe-auth --configuration=production --output-hashing=all",
-    "build-staging:mfe-auth": "ng build mfe-auth --configuration=stage --output-hashing=all",
-    "build-qa:mfe-auth": "ng build mfe-auth --configuration=qa --output-hashing=all"
+    "build:mfe-host": "ng build mfe-host",
+    "build:mfe-auth": "ng build mfe-auth"
   },
   "private": true,
   "dependencies": {
-    "@angular-architects/module-federation": "^19.0.3",
+    "@angular-architects/module-federation": "^18.0.6",
     "@angular/animations": "^19.0.0",
     "@angular/common": "^19.0.0",
     "@angular/compiler": "^19.0.0",
@@ -28,6 +24,7 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "dotenv": "^16.5.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
