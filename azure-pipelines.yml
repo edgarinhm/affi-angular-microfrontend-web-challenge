@@ -1,21 +1,19 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
 trigger:
-  - main  # O la rama que uses para despliegue
+  branches:
+    include:
+      - main
+  paths:
+    exclude: # Exclude!
+      - "projects/*"
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
-# # Evita que otros pipelines se ejecuten en paralelo
-# concurrency:
-#   cancelInProgress: false  # no cancela pipelines anteriores
-#   group: angular-deployment-lock  # asegura que uno a la vez use este grupo
-
-variables:
-  buildDir: dist  # carpeta donde Angular genera el build
-  nodeVersion: '18.x'
-
-stages:
-  - stage: Build
-    jobs:
-      - job: BuildAngularApp
-        steps:
-          - task: NodeTool@0
+steps:
+  - script: |
+      echo "Hello from '/' root folder."
