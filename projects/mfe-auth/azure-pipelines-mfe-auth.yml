@@ -1,0 +1,85 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - "mfe-host/*"
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  nodeVersion: "22.x"
+  npmRegistryURL: "https://registry.npmjs.org/"
+  appName: "mfe-host"
+  appPath: "projects/mfe-host"
+  appArtifactName: "mfe-host"
+  appBuildCommandDev: "npm run build:mfe-host -- --configuration=development"
+  appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(nodeVersion)
+    displayName: "Install Node.js"
+
+  - task: Cache@2
+    dependsOn:
+      - NodeTool@0
+    inputs:
+      key: "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"
+      path: "$(Build.SourcesDirectory)/node_modules"
+      cacheHitVar: CacheRestored
+    displayName: "Cache Npm Dependencies"
+
+  - script: |
+      npm install -g @angular/cli
+      npm install
+    condition: ne(variables['CacheRestored'], 'true')
+    displayName: "Install dependencies"
+
+  - script: ${{ variables.appBuildCommandProd }}
+    displayName: "Build ${{ variables.appName }} Prod"
+    env:
+      MFE_AUTH_URL: $(MFE_AUTH_URL)
+
+  # - task: PublishBuildArtifacts@1
+  #   condition: always()
+  #   continueOnError: true
+  #   inputs:
+  #     pathtoPublish: 'dist/mfe-host'
+  #     artifactName: 'drop'
+  #     publishLocation: 'Container'
+  #   displayName: 'Publish build artifacts'
+
+  - powershell: |
+      $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/${{ variables.appPath }}"
+      Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
+
+  # archive and publish artifacts
+  - task: Cache@2
+    dependsOn:
+      - NodeTool@0
+    displayName: Archive Build Artifacts
+    condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
+    continueOnError: true
+    inputs:
+      rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${variables.appPath}"
+      includeRootFolder: false
+      archiveType: "zip"
+      archiveFile: $(Build.ArtifactStagingDirectory)/build/${variables.appArtifactName}-$(Build.BuildId)-prod.zip
+  - task: Cache@2
+    dependsOn:
+      - NodeTool@0
+    displayName: Publish Build Artifacts
+    condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
+    continueOnError: true
+    inputs:
+      pathtoPublish: $(Build.ArtifactStagingDirectory)/build/${variables.appArtifactName}-$(Build.BuildId)-prod.zip
+      artifactName: "drop"
