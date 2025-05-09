@@ -55,6 +55,7 @@ stages:
               MS_API_URL: $(MS_API_URL)
 
       - job: deploy_build
+        dependsOn: install_dependencies
         pool:
           vmImage: ubuntu-latest
         steps:
