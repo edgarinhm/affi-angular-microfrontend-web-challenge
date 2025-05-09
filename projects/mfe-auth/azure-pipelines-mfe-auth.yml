@@ -59,6 +59,9 @@ stages:
         pool:
           vmImage: ubuntu-latest
         steps:
+          - script: |
+              echo "$(Build.SourcesDirectory)/dist/${{ variables.appPath }}"
+              ls
           - powershell: |
               $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/${{ variables.appPath }}"
               Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
