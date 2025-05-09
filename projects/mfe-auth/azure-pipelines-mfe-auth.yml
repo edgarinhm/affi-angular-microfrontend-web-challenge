@@ -54,8 +54,6 @@ stages:
             env:
               MS_API_URL: $(MS_API_URL)
 
-  - stage: Dev_deploy
-    jobs:
       - job: deploy_build
         pool:
           vmImage: ubuntu-latest
