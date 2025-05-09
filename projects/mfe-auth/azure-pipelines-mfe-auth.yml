@@ -47,7 +47,7 @@ steps:
   - script: ${{ variables.appBuildCommandProd }}
     displayName: "Build ${{ variables.appName }} Prod"
     env:
-      MFE_AUTH_URL: $(MFE_AUTH_URL)
+      MS_API_URL: $(MS_API_URL)
 
   # - task: PublishBuildArtifacts@1
   #   condition: always()
