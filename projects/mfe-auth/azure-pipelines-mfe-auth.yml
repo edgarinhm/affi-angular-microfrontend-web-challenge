@@ -15,6 +15,7 @@ trigger:
 
 variables:
   nodeVersion: "22.x"
+  angularCliVersion: "19.2.10"
   npmRegistryURL: "https://registry.npmjs.org/"
   appName: "mfe-host"
   appPath: "projects/mfe-host"
@@ -22,7 +23,7 @@ variables:
   appBuildCommandDev: "npm run build:mfe-host -- --configuration=development"
   appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
   tag: $(Build.BuildId)
-  DistExists: false
+  NPM_CACHE_FOLDER: $(Pipeline.Workspace)/.npm
 
 stages:
   - stage: Build
@@ -31,65 +32,42 @@ stages:
         pool:
           vmImage: ubuntu-latest
         steps:
+          # Install node
           - task: NodeTool@0
+            displayName: "Install Node.js"
             inputs:
               versionSpec: $(nodeVersion)
-            displayName: "Install Node.js"
 
-          - task: Cache@2
+          - task: Npm@1
+            displayName: "Angular CLI ${{ variables.angularCliVersion}}"
             inputs:
-              key: "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"
-              path: "$(Build.SourcesDirectory)/node_modules"
-              cacheHitVar: CacheRestored
-            displayName: "Cache Npm Dependencies"
+              command: custom
+              verbose: false
+              customCommand: "install -g @angular/cli@${{ variables.angularCliVersion}}"
 
-          - script: |
-              npm install -g @angular/cli
-              npm install
-            condition: ne(variables['CacheRestored'], 'true')
+          # Cache installed npm dependencies
+          - task: Cache@2
+            displayName: "Cache Npm Dependencies"
+            inputs:
+              key: 'npm | "$(Agent.OS)" | package-lock.json'
+              restoreKeys: |
+                npm | "$(Agent.OS)"
+              path: $(NPM_CACHE_FOLDER)
+
+          # Install dependencies
+          - script: npm clean install
             displayName: "Install dependencies"
 
-          - script: |
-              ${{ variables.appBuildCommandProd }}
-              ls
+          - script: ${{ variables.appBuildCommandProd }}
             displayName: "Build ${{ variables.appName }} Prod"
             env:
               MS_API_URL: $(MS_API_URL)
 
-          - powershell: |
-              $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/${{ variables.appPath }}"
-              Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
-
-      - job: deploy_build
-        dependsOn: install_dependencies
-        pool:
-          vmImage: ubuntu-latest
-        steps:
-          # copy artifacts
-          - task: CopyFiles@2
-            displayName: "Copy Files to: $(Build.ArtifactStagingDirectory)"
+          # Copy and publish artifact
+          - task: CopyPublishBuildArtifacts@1
+            displayName: "Copy Publish Artifact: angular-web-${{ variables.appArtifactName }}"
             inputs:
-              SourceFolder: "$(Build.SourcesDirectory)/dist"
+              CopyRoot: /dist
               Contents: "**"
-              TargetFolder: "$(build.artifactstagingdirectory)"
-            condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
-
-          # archive artifacts
-          - task: Cache@2
-            displayName: Archive Build Artifacts
-            condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
-            continueOnError: true
-            inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${variables.appPath}"
-              includeRootFolder: false
-              archiveType: "zip"
-              archiveFile: $(Build.ArtifactStagingDirectory)/build/${variables.appArtifactName}-$(Build.BuildId)-prod.zip
-
-          # publish artifacts
-          - task: Cache@2
-            displayName: Publish Build Artifacts
-            condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
-            continueOnError: true
-            inputs:
-              pathtoPublish: $(Build.ArtifactStagingDirectory)/build/${variables.appArtifactName}-$(Build.BuildId)-prod.zip
-              artifactName: "drop"
+              ArtifactName: angular-web-${{ variables.appArtifactName }}
+              ArtifactType: Container
