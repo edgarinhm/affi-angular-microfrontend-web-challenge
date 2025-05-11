@@ -55,7 +55,7 @@ stages:
               path: $(NPM_CACHE_FOLDER)
 
           # Install dependencies
-          - script: npm cia
+          - script: npm ci
             displayName: "Install dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
