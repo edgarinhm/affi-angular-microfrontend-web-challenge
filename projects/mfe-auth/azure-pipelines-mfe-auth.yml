@@ -21,6 +21,7 @@ variables:
   appArtifactName: "mfe-host"
   appBuildCommandDev: "npm run build:mfe-host -- --configuration=development"
   appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
+  tag: $(Build.BuildId)
 
 stages:
   - stage: Build
@@ -66,7 +67,7 @@ stages:
               $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/${{ variables.appPath }}"
               Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
 
-          # archive and publish artifacts
+          # archive artifacts
           - task: Cache@2
             displayName: Archive Build Artifacts
             condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
@@ -76,6 +77,8 @@ stages:
               includeRootFolder: false
               archiveType: "zip"
               archiveFile: $(Build.ArtifactStagingDirectory)/build/${variables.appArtifactName}-$(Build.BuildId)-prod.zip
+
+          # publish artifacts
           - task: Cache@2
             displayName: Publish Build Artifacts
             condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
