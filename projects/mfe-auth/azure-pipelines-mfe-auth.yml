@@ -66,6 +66,15 @@ stages:
           - powershell: |
               $distExists = Test-Path -Path "$(Build.SourcesDirectory)/dist/${{ variables.appPath }}"
               Write-Host "##vso[task.setvariable variable=DistExists]$distExists"
+          
+          # copy artifacts
+          - task: CopyFiles@2
+            displayName: "Copy Files to: $(Build.ArtifactStagingDirectory)"
+            inputs:
+              SourceFolder: 'dist'
+              Contents: '**'
+              TargetFolder: '$(build.artifactstagingdirectory)'
+            condition: eq(variables['DistExists'], True) # If dist folder present then copy else skip
 
           # archive artifacts
           - task: Cache@2
