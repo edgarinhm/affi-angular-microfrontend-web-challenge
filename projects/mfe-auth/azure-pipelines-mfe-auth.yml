@@ -49,7 +49,7 @@ stages:
           - task: Cache@2
             displayName: "Cache Npm Dependencies"
             inputs:
-              key: 'npm | "$(Agent.OS)" | package-lock.json'
+              key: 'version2  | npm | "$(Agent.OS)" | package-lock.json'
               restoreKeys: |
                 npm | "$(Agent.OS)"
               path: $(NPM_CACHE_FOLDER)
