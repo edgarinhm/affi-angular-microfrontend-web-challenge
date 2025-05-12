@@ -23,7 +23,7 @@ variables:
   appBuildCommandDev: "npm run build:mfe-host -- --configuration=development"
   appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
   tag: $(Build.BuildId)
-  NPM_CACHE_FOLDER: $(Pipeline.Workspace)/.npm
+  NPM_CACHE_FOLDER: "$(Build.SourcesDirectory)/node_modules"
 
 stages:
   - stage: Build
@@ -40,8 +40,10 @@ stages:
 
           - task: Cache@2
             inputs:
-              key: "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"
-              path: "$(Build.SourcesDirectory)/node_modules"
+              key: 'npm | "$(Agent.OS)" | package-lock.json'
+              restoreKeys: |
+                npm | "$(Agent.OS)"
+              path: $(NPM_CACHE_FOLDER)
               cacheHitVar: NPM_CACHE_RESTORED
             displayName: "Cache Npm Dependencies"
 
