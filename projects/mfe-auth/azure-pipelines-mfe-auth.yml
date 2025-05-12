@@ -64,7 +64,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: Archive Build Artifacts
             inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist"
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ variable.appArtifactName }}"
               includeRootFolder: false
               archiveType: "zip"
               archiveFile: "$(Build.ArtifactStagingDirectory)/build/$(Build.BuildId).zip"
