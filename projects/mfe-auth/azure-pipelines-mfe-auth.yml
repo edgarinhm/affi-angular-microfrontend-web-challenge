@@ -20,6 +20,7 @@ variables:
   appName: "mfe-host"
   appPath: "projects/mfe-host"
   appArtifactName: "mfe-host"
+  appArtifactPath: "mfe-host"
   appBuildCommandDev: "npm run build:mfe-host -- --configuration=development"
   appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
   tag: $(Build.BuildId)
@@ -62,9 +63,9 @@ stages:
 
           # Archive build artifacts
           - task: ArchiveFiles@2
-            displayName: Archive Build Artifacts
+            displayName: "Archive Build Artifacts ${{ variable.appArtifactName }}"
             inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ variable.appArtifactName }}"
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ variable.appArtifactPath }}"
               includeRootFolder: false
               archiveType: "zip"
               archiveFile: "$(Build.ArtifactStagingDirectory)/build/$(Build.BuildId).zip"
