@@ -40,18 +40,18 @@ stages:
 
           - task: Cache@2
             inputs:
-              key: "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"
-              restoreKeys: |
-                npm | "$(Agent.OS)"
+              key: 'npm | "$(Agent.OS)" | package-lock.json | **/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
+              # restoreKeys: |
+              #   npm | "$(Agent.OS)"
               path: $(NPM_CACHE_FOLDER)
-              #cacheHitVar: NPM_CACHE_RESTORED
+              cacheHitVar: NPM_CACHE_RESTORED
             displayName: "Cache Npm Dependencies"
 
           # Install dependencies
           - script: |
               npm install -g @angular/cli@${{ variables.angularCliVersion}}
               npm ci
-            #condition: ne(variables.NPM_CACHE_RESTORED, 'true')
+            condition: ne(variables.NPM_CACHE_RESTORED, 'true')
             displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
