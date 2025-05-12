@@ -39,20 +39,6 @@ stages:
             inputs:
               versionSpec: $(nodeVersion)
 
-          # Restore the cache
-          - task: Cache@2
-            inputs:
-              key: $(NPM_CACHE_KEYS)
-              path: $(NPM_CACHE_FOLDER)
-            displayName: "Restore NPM and dependencies cache"
-
-          # Install dependencies
-          - script: |
-              npm install -g @angular/cli@${{ variables.angularCliVersion}}
-              npm ci
-            condition: ne(variables.NPM_CACHE_RESTORED, 'true')
-            displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
-
           # Save the cache
           - task: Cache@2
             inputs:
@@ -62,6 +48,13 @@ stages:
               path: $(NPM_CACHE_FOLDER)
               cacheHitVar: NPM_CACHE_RESTORED
             displayName: "Cache Npm Dependencies"
+
+          # Install dependencies
+          - script: |
+              npm install -g @angular/cli@${{ variables.angularCliVersion}}
+              npm ci
+            condition: ne(variables.NPM_CACHE_RESTORED, 'true')
+            displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
             displayName: "Build ${{ variables.appName }} Prod"
