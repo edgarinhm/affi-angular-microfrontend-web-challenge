@@ -59,13 +59,13 @@ stages:
             displayName: "Build ${{ variables.appName }} Prod"
             env:
               MS_API_URL: $(MS_API_URL)
-              
+
           # archive build artifacts
           - task: ArchiveFiles@2
             displayName: Archive Build Artifacts
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/${variables.appPath}'
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{variables.appPath}}"
               includeRootFolder: false
-              archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/${variables.appArtifactName}-$(Build.BuildId).zip'
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/${{variables.appArtifactName}}-$(Build.BuildId).zip"
               replaceExistingArchive: true
