@@ -44,7 +44,7 @@ stages:
             inputs:
               key: $(NPM_CACHE_KEYS)
               path: $(NPM_CACHE_FOLDER)
-              displayName: "Restore NPM and dependencies cache"
+            displayName: "Restore NPM and dependencies cache"
 
           # Install dependencies
           - script: |
@@ -62,7 +62,6 @@ stages:
               path: $(NPM_CACHE_FOLDER)
               cacheHitVar: NPM_CACHE_RESTORED
             displayName: "Cache Npm Dependencies"
-            condition: ne(variables.NPM_CACHE_RESTORED, 'true')
 
           - script: ${{ variables.appBuildCommandProd }}
             displayName: "Build ${{ variables.appName }} Prod"
