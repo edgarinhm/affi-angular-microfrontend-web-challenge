@@ -42,14 +42,14 @@ stages:
             inputs:
               key: "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"
               path: $(NPM_CACHE_FOLDER)
-              cacheHitVar: NPM_CACHE_RESTORED
+              #cacheHitVar: NPM_CACHE_RESTORED
             displayName: "Cache Npm Dependencies"
 
           # Install dependencies
           - script: |
               npm install -g @angular/cli@${{ variables.angularCliVersion}}
               npm ci
-            condition: ne(variables.NPM_CACHE_RESTORED, 'true')
+            #condition: ne(variables.NPM_CACHE_RESTORED, 'true')
             displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
