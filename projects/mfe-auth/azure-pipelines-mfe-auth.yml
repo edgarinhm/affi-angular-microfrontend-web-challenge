@@ -59,12 +59,13 @@ stages:
             displayName: "Build ${{ variables.appName }} Prod"
             env:
               MS_API_URL: $(MS_API_URL)
-
-          # Copy and publish artifact
-          - task: CopyPublishBuildArtifacts@1
-            displayName: "Copy Publish Artifact: angular-web-${{ variables.appArtifactName }}"
+              
+          # archive and publish artifacts
+          - task: ArchiveFiles@2
+            displayName: Archive Build Artifacts
             inputs:
-              CopyRoot: /dist
-              Contents: "**"
-              ArtifactName: angular-web-${{ variables.appArtifactName }}
-              ArtifactType: Container
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              replaceExistingArchive: true
