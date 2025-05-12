@@ -40,7 +40,7 @@ stages:
 
           - task: Cache@2
             inputs:
-              key: 'npm | "$(Agent.OS)" | "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"'
+              key: 'npm | "$(Agent.OS)" | package-lock.json | "**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json"'
               # restoreKeys: |
               #   npm | "$(Agent.OS)"
               path: $(NPM_CACHE_FOLDER)
