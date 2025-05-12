@@ -50,7 +50,7 @@ stages:
           # Install dependencies
           - script: |
               npm install -g @angular/cli@${{ variables.angularCliVersion}}
-              npm ci
+              npm ci --cache $(NPM_CACHE_FOLDER)
             displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
