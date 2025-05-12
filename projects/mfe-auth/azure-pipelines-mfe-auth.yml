@@ -45,12 +45,14 @@ stages:
               key: 'npm | "$(Agent.OS)" | package-lock.json'
               restoreKeys: |
                 npm | "$(Agent.OS)"
+              cacheHitVar: NPM_CACHE_RESTORED
               path: $(NPM_CACHE_FOLDER)
 
           # Install dependencies
           - script: |
               npm install -g @angular/cli@${{ variables.angularCliVersion}}
               npm ci --cache $(NPM_CACHE_FOLDER)
+            condition: ne(variables.NPM_CACHE_RESTORED, 'true')
             displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
