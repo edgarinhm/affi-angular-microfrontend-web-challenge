@@ -63,17 +63,17 @@ stages:
 
           # Archive build artifacts
           - task: ArchiveFiles@2
-            displayName: "Archive Build Artifacts ${{ variable.appArtifactName }}"
+            displayName: "Archive Build Artifacts ${{ variables.appArtifactName }}"
             inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ variable.appArtifactPath }}"
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ variables.appArtifactPath }}"
               includeRootFolder: false
               archiveType: "zip"
-              archiveFile: "$(Build.ArtifactStagingDirectory)/build/${{ variable.appArtifactPath }}-$(Build.BuildId).zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/build/${{ variables.appArtifactPath }}-$(Build.BuildId).zip"
               replaceExistingArchive: true
 
           # Publish build artifacts
           - task: PublishBuildArtifacts@1
             displayName: Publish Build Artifacts
             inputs:
-              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/${{ variable.appArtifactPath }}-$(Build.BuildId).zip"
+              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/${{ variables.appArtifactPath }}-$(Build.BuildId).zip"
               artifactName: "drop"
