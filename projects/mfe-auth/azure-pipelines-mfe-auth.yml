@@ -38,25 +38,20 @@ stages:
             inputs:
               versionSpec: $(nodeVersion)
 
-          - task: Npm@1
-            displayName: "Angular CLI ${{ variables.angularCliVersion}}"
-            inputs:
-              command: custom
-              verbose: false
-              customCommand: "install -g @angular/cli@${{ variables.angularCliVersion}}"
-
           # Cache installed npm dependencies
           - task: Cache@2
             displayName: "Cache Npm Dependencies"
             inputs:
-              key: 'version2  | npm | "$(Agent.OS)" | package-lock.json'
+              key: 'npm | "$(Agent.OS)" | package-lock.json'
               restoreKeys: |
                 npm | "$(Agent.OS)"
               path: $(NPM_CACHE_FOLDER)
 
           # Install dependencies
-          - script: npm ci --cache $(NPM_CACHE_FOLDER)
-            displayName: "Install dependencies"
+          - script: |
+              npm install -g @angular/cli@${{ variables.angularCliVersion}}
+              npm ci
+            displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
             displayName: "Build ${{ variables.appName }} Prod"
