@@ -68,12 +68,12 @@ stages:
               rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ variable.appArtifactPath }}"
               includeRootFolder: false
               archiveType: "zip"
-              archiveFile: "$(Build.ArtifactStagingDirectory)/build/$(Build.BuildId).zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/build/${{ variable.appArtifactPath }}-$(Build.BuildId).zip"
               replaceExistingArchive: true
 
           # Publish build artifacts
           - task: PublishBuildArtifacts@1
             displayName: Publish Build Artifacts
             inputs:
-              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/$(Build.BuildId).zip"
+              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/${{ variable.appArtifactPath }}-$(Build.BuildId).zip"
               artifactName: "drop"
