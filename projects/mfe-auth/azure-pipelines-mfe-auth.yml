@@ -44,7 +44,7 @@ stages:
               restoreKeys: |
                 npm | "$(Agent.OS)"
               path: $(NPM_CACHE_FOLDER)
-              cacheHitVar: NPM_CACHE_RESTORED
+              #cacheHitVar: NPM_CACHE_RESTORED
             displayName: "Cache Npm Dependencies"
 
           # Install dependencies
