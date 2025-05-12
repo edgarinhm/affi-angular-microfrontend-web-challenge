@@ -24,6 +24,7 @@ variables:
   appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
   tag: $(Build.BuildId)
   NPM_CACHE_FOLDER: $(Pipeline.Workspace)/.npm
+  NPM_CACHE_KEYS: 'npm | "$(Agent.OS)" | package-lock.json | **/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
 
 stages:
   - stage: Build
@@ -38,14 +39,12 @@ stages:
             inputs:
               versionSpec: $(nodeVersion)
 
+          # Restore the cache
           - task: Cache@2
             inputs:
-              key: 'npm | "$(Agent.OS)" | package-lock.json | **/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-              restoreKeys: |
-                npm | "$(Agent.OS)"
+              key: $(NPM_CACHE_KEYS)
               path: $(NPM_CACHE_FOLDER)
-              cacheHitVar: NPM_CACHE_RESTORED
-            displayName: "Cache Npm Dependencies"
+              displayName: "Restore NPM and dependencies cache"
 
           # Install dependencies
           - script: |
@@ -53,6 +52,16 @@ stages:
               npm ci
             condition: ne(variables.NPM_CACHE_RESTORED, 'true')
             displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
+
+          # Save the cache
+          - task: Cache@2
+            inputs:
+              key: $(NPM_CACHE_KEYS)
+              restoreKeys: |
+                npm | "$(Agent.OS)"
+              path: $(NPM_CACHE_FOLDER)
+              cacheHitVar: NPM_CACHE_RESTORED
+            displayName: "Cache Npm Dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
             displayName: "Build ${{ variables.appName }} Prod"
