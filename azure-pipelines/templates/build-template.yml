@@ -5,6 +5,7 @@ stages:
     #pool:
     jobs:
       - job: build
+        displayName: Build ${{ variables.stageDisplayName }}
         steps:
           # Install node
           - task: NodeTool@0
@@ -44,7 +45,8 @@ stages:
               replaceExistingArchive: true
 
       - job: publish
-        displayName: publish
+        displayName: Publish ${{ variables.stageDisplayName }}
+        dependsOn: build
         #pool:
         steps:
           # Publish build artifacts
