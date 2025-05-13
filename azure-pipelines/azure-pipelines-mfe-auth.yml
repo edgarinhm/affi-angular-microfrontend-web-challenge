@@ -15,6 +15,7 @@ variables:
       APP_ARTIFACT_NAME: "mfe-auth"
       APP_ARTIFACT_PATH: "mfe-auth"
       ENVIRONMENT_NAME: "mfe-auth"
+      BUILD_PREFIX_COMMAND: "mfe-auth"
 
 pool:
   vmImage: $(vmImageName)
