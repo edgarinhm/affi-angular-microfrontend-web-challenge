@@ -1,11 +1,11 @@
 stages:
   - stage: ${{ parameters.stageName }}
-    displayName: "Build and publish artifact $(appName)"
+    displayName: Build and publish artifact ${{ parameters.stageDisplayName }}
     #group:
     #pool:
     jobs:
       - job: build
-        displayName: "Build  $(appName)"
+        displayName: Build  ${{ parameters.stageDisplayName }}
         steps:
           # Install node
           - task: NodeTool@0
@@ -43,7 +43,7 @@ stages:
               replaceExistingArchive: true
 
       - job: publish
-        displayName: "Publish $(appName)"
+        displayName: Publish ${{ parameters.stageDisplayName }}
         dependsOn: build
         #pool:
         steps:
