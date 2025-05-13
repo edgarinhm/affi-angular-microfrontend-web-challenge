@@ -5,7 +5,7 @@ stages:
     #pool:
     jobs:
       - job: build
-        displayName: Build ${{ parameters.stageDisplayName }}
+        displayName: Build $(appName)
         steps:
           # Install node
           - task: NodeTool@0
@@ -43,7 +43,7 @@ stages:
               replaceExistingArchive: true
 
       - job: publish
-        displayName: Publish ${{ parameters.stageDisplayName }}
+        displayName: Publish $(appName)
         dependsOn: build
         #pool:
         steps:
