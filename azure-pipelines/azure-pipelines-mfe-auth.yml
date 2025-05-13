@@ -24,6 +24,8 @@ stages:
     parameters:
       stageName: build-${{ variables.appArtifactName }}
       stageDisplayName: Build and publish artifact ${{ variables.appName }}
+      env:
+        MS_API_URL: $(MS_API_URL)
 
   # - template: templates/deploy-function-type-template.yml
   #   parameters:

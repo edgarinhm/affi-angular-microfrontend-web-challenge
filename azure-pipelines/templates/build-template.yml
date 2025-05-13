@@ -1,11 +1,11 @@
 stages:
-  - stage: ${{ variables.stageName }}
-    displayName: ${{ variables.stageDisplayName }}
+  - stage: ${{ parameters.stageName }}
+    displayName: ${{ parameters.stageDisplayName }}
     #group:
     #pool:
     jobs:
       - job: build
-        displayName: Build ${{ variables.stageDisplayName }}
+        displayName: Build ${{ parameters.stageDisplayName }}
         steps:
           # Install node
           - task: NodeTool@0
@@ -30,18 +30,16 @@ stages:
             displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
 
           - script: ${{ variables.appBuildCommandProd }}
-            displayName: "Build ${{ parameters.appName }}"
-            env:
-              MS_API_URL: $(MS_API_URL)
+            displayName: "Build ${{ variables.appName }}"
 
           # Archive build artifacts
           - task: ArchiveFiles@2
-            displayName: "Archive Build Artifacts ${{ parameters.appArtifactName }}"
+            displayName: "Archive Build Artifacts ${{ variables.appArtifactName }}"
             inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ parameters.appArtifactPath }}"
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ variables.appArtifactPath }}"
               includeRootFolder: false
               archiveType: "zip"
-              archiveFile: "$(Build.ArtifactStagingDirectory)/build/${{ parameters.appArtifactPath }}-$(Build.BuildId).zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/build/${{ variables.appArtifactPath }}-$(Build.BuildId).zip"
               replaceExistingArchive: true
 
       - job: publish
@@ -53,6 +51,6 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: Publish Build Artifacts
             inputs:
-              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/${{ parameters.appArtifactPath }}-$(Build.BuildId).zip"
-              artifactName: "drop-${{ parameters.appArtifactName }}"
+              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/${{ variables.appArtifactPath }}-$(Build.BuildId).zip"
+              artifactName: "drop-${{ variables.appArtifactName }}"
               publishLocation: "Container"
