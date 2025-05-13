@@ -24,7 +24,6 @@ stages:
   - template: templates/build-template.yml
     parameters:
       stageName: build_mfe_host
-      stageDisplayName: Build and publish artifact ${{ variables.appName }}
       env:
         MS_API_URL: $(MS_API_URL)
 
