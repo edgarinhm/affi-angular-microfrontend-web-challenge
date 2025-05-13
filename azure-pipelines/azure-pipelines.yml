@@ -1,0 +1,19 @@
+variables:
+  nodeVersion: "22.x"
+  angularCliVersion: "19.2.10"
+  npmRegistryURL: "https://registry.npmjs.org/"
+  appBuildCommandDev: "npm run build:mfe-host -- --configuration=development"
+  appBuildCommandProd: "npm run build:mfe-host -- --configuration=production"
+  tag: $(Build.BuildId)
+  NPM_CACHE_FOLDER: $(Pipeline.Workspace)/.npm
+  NPM_CACHE_KEYS: 'npm | "$(Agent.OS)" | package-lock.json | **/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
+  azureSubscription: "mfe-host"
+  vmImageName: "ubuntu-latest"
+
+stages:
+  - template: azure-pipeline-mfe-auth.yml
+    parameters:
+      appName: "mfe-host"
+      appArtifactName: "mfe-host"
+      appArtifactPath: "mfe-host"
+      environmentName: "mfe-host"

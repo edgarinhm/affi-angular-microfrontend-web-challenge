@@ -1,0 +1,22 @@
+stages:
+  - stage: ${{ parameters.stageName }}
+    displayName: ${{ parameters.stageDisplayName }}
+    dependsOn: build
+    condition: succeeded()
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy
+        environment: ${{ parameters.environmentName}}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebApp@1
+                  displayName: "Azure Web App Deploy: ${{ parameters.appName }}"
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    appType: webAppLinux
+                    appName: $(appName)
+                    runtimeStack: "NODE|$(nodeVersion)"
+                    package: $(Pipeline.Workspace)/drop/${{ parameters.appArtifactPath }}-$(Build.BuildId).zip
+                    startUpCommand: "npm start"

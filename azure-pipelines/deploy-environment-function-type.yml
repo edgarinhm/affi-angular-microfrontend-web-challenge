@@ -1,0 +1,26 @@
+stages:
+  - stage: ${{ parameters.stageName}}
+    displayName: ${{ parameters.stageDisplayName}}
+    dependsOn: build
+    condition: succeeded()
+    jobs:
+      - deployment:
+        environment:
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: "current"
+                    downloadType: "single"
+                    artifactName: "drop-${{ parameters.appArtifactName }}"
+                    downloadPath: "$(System.ArtifactStagingDirectory)"
+
+                - task: AzureFunctionApp@2
+                  inputs:
+                    connectedServiceNameARM: $(azureSubscription)
+                    appType: "functionApp"
+                    appName: "funct-01"
+                    package: "$(System.DefaultWorkingDirectory)/**/*.zip"
+                    deploymentMethod: "auto"

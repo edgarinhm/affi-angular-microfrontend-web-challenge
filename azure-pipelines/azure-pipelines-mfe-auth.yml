@@ -1,0 +1,28 @@
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+      - fix/*
+  paths:
+    include:
+      - "$(appArtifactName)/*"
+
+pool:
+  vmImage: $(vmImageName)
+
+stages:
+  - template: build-mfe.yml
+    parameters:
+      stageName: build-${{ parameters.appArtifactName }}
+      stageDisplayName: Build and publish artifact ${{ parameters.appName }}
+
+  - template: deploy-environment-function-type.yml
+    parameters:
+      stageName: dev-${{ parameters.appArtifactName }}
+      stageDisplayName: Dev environment ${{ parameters.appName }}
+
+  - template: deploy-environment-web-app-type.yml
+    parameters:
+      stageName: deploy-${{ parameters.appArtifactName }}
+      stageDisplayName: Deploy stage ${{ parameters.appName }}

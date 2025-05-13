@@ -1,0 +1,56 @@
+stages:
+  - stage: ${{ variables.stageName }}
+    displayName: ${{ variables.stageDisplayName }}
+    #group:
+    #pool:
+    jobs:
+      - job: build
+        steps:
+          # Install node
+          - task: NodeTool@0
+            displayName: "Install Node.js"
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          # Save the cache
+          - task: Cache@2
+            inputs:
+              key: $(NPM_CACHE_KEYS)
+              restoreKeys: |
+                npm | "$(Agent.OS)"
+              path: $(NPM_CACHE_FOLDER)
+              cacheHitVar: NPM_CACHE_RESTORED
+            displayName: "Cache Npm Dependencies"
+
+          # Install dependencies
+          - script: |
+              npm install -g @angular/cli@${{ variables.angularCliVersion}}
+              npm ci
+            displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
+
+          - script: ${{ variables.appBuildCommandProd }}
+            displayName: "Build ${{ parameters.appName }}"
+            env:
+              MS_API_URL: $(MS_API_URL)
+
+          # Archive build artifacts
+          - task: ArchiveFiles@2
+            displayName: "Archive Build Artifacts ${{ parameters.appArtifactName }}"
+            inputs:
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ parameters.appArtifactPath }}"
+              includeRootFolder: false
+              archiveType: "zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/build/${{ parameters.appArtifactPath }}-$(Build.BuildId).zip"
+              replaceExistingArchive: true
+
+      - job: publish
+        displayName: publish
+        #pool:
+        steps:
+          # Publish build artifacts
+          - task: PublishBuildArtifacts@1
+            displayName: Publish Build Artifacts
+            inputs:
+              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/${{ parameters.appArtifactPath }}-$(Build.BuildId).zip"
+              artifactName: "drop-${{ parameters.appArtifactName }}"
+              publishLocation: "Container"
