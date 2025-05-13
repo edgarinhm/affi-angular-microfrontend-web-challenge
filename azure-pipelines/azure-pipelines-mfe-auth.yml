@@ -22,17 +22,17 @@ pool:
 stages:
   - template: templates/build-template.yml
     parameters:
-      stageName: build-${{ variables.appArtifactName }}
+      stageName: build_mfe_host
       stageDisplayName: Build and publish artifact ${{ variables.appName }}
       env:
         MS_API_URL: $(MS_API_URL)
 
   # - template: templates/deploy-function-type-template.yml
   #   parameters:
-  #     stageName: dev-${{ variables.appArtifactName }}
+  #     stageName: dev_mfe_host
   #     stageDisplayName: Dev environment ${{ variables.appName }}
 
   # - template: templates/deploy-web-app-type-template.yml
   #   parameters:
-  #     stageName: deploy-${{ variables.appArtifactName }}
+  #     stageName: deploy_mfe_host
   #     stageDisplayName: Deploy stage ${{ variables.appName }}
