@@ -47,6 +47,8 @@ stages:
         dependsOn: build
         #pool:
         steps:
+          # Prevent checking out any source code
+          - checkout: none
           # Publish build artifacts
           - task: PublishBuildArtifacts@1
             displayName: Publish Build Artifacts
