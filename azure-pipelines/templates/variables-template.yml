@@ -1,14 +1,14 @@
 parameters:
-  - name: appName
+  - name: APP_NAME
     type: string
     default: "mfe-host"
-  - name: appArtifactName
+  - name: APP_ARTIFACT_NAME
     type: string
     default: "mfe-host"
-  - name: appArtifactPath
+  - name: APP_ARTIFACT_PATH
     type: string
     default: "mfe-host"
-  - name: environmentName
+  - name: ENVIRONMENT_NAME
     type: string
     default: "mfe-host"
 
@@ -23,7 +23,7 @@ variables:
   NPM_CACHE_KEYS: 'npm | "$(Agent.OS)" | package-lock.json | **/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
   azureSubscription: "mfe-host"
   vmImageName: "ubuntu-latest"
-  appName: ${{ parameters.appName }}
-  appArtifactName: ${{ parameters.appArtifactName }}
-  appArtifactPath: ${{ parameters.appArtifactPath }}
-  environmentName: ${{ parameters.environmentName }}
+  appName: ${{ parameters.APP_NAME }}
+  appArtifactName: ${{ parameters.APP_ARTIFACT_NAME }}
+  appArtifactPath: ${{ parameters.APP_ARTIFACT_PATH }}
+  environmentName: ${{ parameters.ENVIRONMENT_NAME }}

@@ -11,10 +11,10 @@ trigger:
 variables:
   - template: templates/variables-template.yml
     parameters:
-      appName: "mfe-host"
-      appArtifactName: "mfe-host"
-      appArtifactPath: "mfe-host"
-      environmentName: "mfe-host"
+      APP_NAME: "mfe-host"
+      APP_ARTIFACT_NAME: "mfe-host"
+      APP_ARTIFACT_PATH: "mfe-host"
+      ENVIRONMENT_NAME: "mfe-host"
 
 pool:
   vmImage: $(vmImageName)

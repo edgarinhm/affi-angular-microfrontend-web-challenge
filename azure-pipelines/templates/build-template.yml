@@ -43,7 +43,7 @@ stages:
               replaceExistingArchive: true
 
       - job: publish
-        displayName: Publish ${{ variables.stageDisplayName }}
+        displayName: Publish ${{ parameters.stageDisplayName }}
         dependsOn: build
         #pool:
         steps:
