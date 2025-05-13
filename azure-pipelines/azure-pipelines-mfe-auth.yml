@@ -8,16 +8,16 @@ trigger:
     include:
       - "mfe-host/*"
 
-pool:
-  vmImage: $(vmImageName)
-
 variables:
-  - template: templates/variables-template
+  - template: templates/variables-template.yml
     parameters:
       appName: "mfe-host"
       appArtifactName: "mfe-host"
       appArtifactPath: "mfe-host"
       environmentName: "mfe-host"
+
+pool:
+  vmImage: $(vmImageName)
 
 stages:
   - template: templates/build-template.yml
