@@ -34,7 +34,7 @@ stages:
 
           # Archive build artifacts
           - task: ArchiveFiles@2
-            displayName: "Archive Build Artifacts $(appArtifactName)"
+            displayName: "Archive Artifacts $(appArtifactName)"
             inputs:
               rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/$(appArtifactPath)"
               includeRootFolder: false
@@ -51,8 +51,8 @@ stages:
           #     - checkout: none
           # Publish build artifacts
           - task: PublishBuildArtifacts@1
-            displayName: Publish Build Artifacts
+            displayName: "Publish Artifacts $(appArtifactName)"
             inputs:
               pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/$(appArtifactPath)-$(Build.BuildId).zip"
               artifactName: "drop-$(appArtifactName)"
-              #publishLocation: "Container"
+              publishLocation: "Container"
