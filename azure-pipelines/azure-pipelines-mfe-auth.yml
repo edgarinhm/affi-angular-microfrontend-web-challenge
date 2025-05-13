@@ -6,15 +6,15 @@ trigger:
       - fix/*
   paths:
     include:
-      - "mfe-host/*"
+      - "mfe-auth/*"
 
 variables:
   - template: templates/variables-template.yml
     parameters:
-      APP_NAME: "mfe-host"
-      APP_ARTIFACT_NAME: "mfe-host"
-      APP_ARTIFACT_PATH: "mfe-host"
-      ENVIRONMENT_NAME: "mfe-host"
+      APP_NAME: "mfe-auth"
+      APP_ARTIFACT_NAME: "mfe-auth"
+      APP_ARTIFACT_PATH: "mfe-auth"
+      ENVIRONMENT_NAME: "mfe-auth"
 
 pool:
   vmImage: $(vmImageName)
