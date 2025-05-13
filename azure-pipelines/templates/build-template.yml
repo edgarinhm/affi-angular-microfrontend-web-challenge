@@ -25,21 +25,21 @@ stages:
 
           # Install dependencies
           - script: |
-              npm install -g @angular/cli@${{ variables.angularCliVersion}}
+              npm install -g @angular/cli@$(angularCliVersion)
               npm ci
-            displayName: "Angular CLI ${{ variables.angularCliVersion}} and Install dependencies"
+            displayName: "Angular CLI $(angularCliVersion) and Install dependencies"
 
-          - script: ${{ variables.appBuildCommandProd }}
-            displayName: "Build ${{ variables.appName }}"
+          - script: $(appBuildCommandProd)
+            displayName: "Build $(appName)"
 
           # Archive build artifacts
           - task: ArchiveFiles@2
-            displayName: "Archive Build Artifacts ${{ variables.appArtifactName }}"
+            displayName: "Archive Build Artifacts $(appArtifactName)"
             inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/${{ variables.appArtifactPath }}"
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist/$(appArtifactPath)"
               includeRootFolder: false
               archiveType: "zip"
-              archiveFile: "$(Build.ArtifactStagingDirectory)/build/${{ variables.appArtifactPath }}-$(Build.BuildId).zip"
+              archiveFile: "$(Build.ArtifactStagingDirectory)/build/$(appArtifactPath)-$(Build.BuildId).zip"
               replaceExistingArchive: true
 
       - job: publish
@@ -51,6 +51,6 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: Publish Build Artifacts
             inputs:
-              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/${{ variables.appArtifactPath }}-$(Build.BuildId).zip"
-              artifactName: "drop-${{ variables.appArtifactName }}"
+              pathtoPublish: "$(Build.ArtifactStagingDirectory)/build/$(appArtifactPath)-$(Build.BuildId).zip"
+              artifactName: "drop-$(appArtifactName)"
               publishLocation: "Container"
