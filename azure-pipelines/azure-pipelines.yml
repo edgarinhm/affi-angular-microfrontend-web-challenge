@@ -11,7 +11,7 @@ variables:
   vmImageName: "ubuntu-latest"
 
 stages:
-  - template: azure-pipeline-mfe-auth.yml
+  - template: azure-pipelines-mfe-auth.yml
     parameters:
       appName: "mfe-host"
       appArtifactName: "mfe-host"
