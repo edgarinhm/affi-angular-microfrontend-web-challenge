@@ -26,7 +26,7 @@ stages:
           # Install dependencies
           - script: |
               npm install -g @angular/cli@$(angularCliVersion)
-              npm ci
+              npm install
             displayName: "Angular CLI $(angularCliVersion) and Install dependencies"
 
           - script: $(appBuildCommandProd)
