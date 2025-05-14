@@ -38,13 +38,13 @@ stages:
       stageName: build_mfe_host
       stageDisplayName: ${{ variables.appName }}
       environmentVariables: ${{ parameters.environmentVariables }}
-      set_env:
-        # - script: echo "##vso[task.setvariable variable=MFE_AUTH_URL]$(MFE_AUTH_URL)"
-        #   displayName: "set env MFE_AUTH_URL"
-        - script: $(appBuildCommandProd)
-          displayName: "Build ${{ variables.appName }}"
-          env:
-            MFE_AUTH_URL: $(MFE_AUTH_URL)
+      # set_env:
+      #   # - script: echo "##vso[task.setvariable variable=MFE_AUTH_URL]$(MFE_AUTH_URL)"
+      #   #   displayName: "set env MFE_AUTH_URL"
+      #   - script: $(appBuildCommandProd)
+      #     displayName: "Build ${{ variables.appName }}"
+      #     env:
+      #       MFE_AUTH_URL: $(MFE_AUTH_URL)
 
   # - template: templates/deploy-function-type-template.yml
   #   parameters:

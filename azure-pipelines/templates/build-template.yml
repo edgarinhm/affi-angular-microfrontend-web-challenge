@@ -37,18 +37,18 @@ stages:
               npm ci
             displayName: "Angular CLI $(angularCliVersion) and Install dependencies"
 
-          - ${{ each step in parameters.set_env }}:
-              - ${{ step }}
+          # - ${{ each step in parameters.set_env }}:
+          #     - ${{ step }}
 
-          # - ${{ each customEnv in parameters.environmentVariables }}:
-          #     - script: echo "Setting variable ${{ customEnv.variableName }}"
-          #       # - script: |
-          #       #     echo "Setting variable ${{ customEnv.variableName }}"
-          #       #     echo "##vso[task.setvariable variable=${{ customEnv.variableName}};]${{ customEnv.variableValue }}"
-          #   displayName: "Set Environment Variable"
+          - ${{ each customEnv in parameters.environmentVariables }}:
+              - script: echo "Setting variable ${{ customEnv.variableName }}"
+                # - script: |
+                #     echo "Setting variable ${{ customEnv.variableName }}"
+                #     echo "##vso[task.setvariable variable=${{ customEnv.variableName}};]${{ customEnv.variableValue }}"
+            displayName: "Set Environment Variable"
 
-          # - script: $(appBuildCommandProd)
-          #   displayName: "Build $(appName)"
+          - script: $(appBuildCommandProd)
+            displayName: "Build $(appName)"
 
           # Archive build artifacts
           - task: ArchiveFiles@2
