@@ -6,7 +6,7 @@ trigger:
       - fix/*
   paths:
     include:
-      - "mfe-host/*"
+      - "projects/mfe-host/*"
 
 variables:
   - template: templates/variables-template.yml

@@ -6,7 +6,7 @@ trigger:
       - fix/*
   paths:
     include:
-      - "mfe-auth/*"
+      - "projects/mfe-auth/*"
 
 variables:
   - template: templates/variables-template.yml
