@@ -15,7 +15,7 @@ stages:
                   displayName: "Azure Web App Deploy: $(deployAppName)"
                   inputs:
                     azureSubscription: $(appAzureSubscription)
-                    appType: webAppLinux
+                    appType: $(deployAppType)
                     appName: $(deployAppName)
                     package: $(Pipeline.Workspace)/drop-$(appArtifactPath)/$(appArtifactPath)-$(Build.BuildId).zip
                     runtimeStack: $(deployRuntimeStack)

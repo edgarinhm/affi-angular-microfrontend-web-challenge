@@ -16,6 +16,8 @@ variables:
       APP_ARTIFACT_PATH: "mfe-auth"
       ENVIRONMENT_NAME: "mfe-auth"
       BUILD_PREFIX_COMMAND: "mfe-auth"
+      AZURE_SUBSCRIPTION: "Azure for Students(1)(121f6adb-a21e-4a35-a892-c1609c3b5952)"
+      DEPLOY_APP_NAME: "affi-challenge-auth-web"
 
 pool:
   vmImage: $(vmImageName)
@@ -23,17 +25,20 @@ pool:
 stages:
   - template: templates/build-template.yml
     parameters:
-      stageName: build_mfe_host
+      stageName: build_mfe_auth
       stageDisplayName: ${{ variables.appName }}
       env:
         MS_API_URL: $(MS_API_URL)
 
   # - template: templates/deploy-function-type-template.yml
   #   parameters:
-  #     stageName: dev_mfe_host
+  #     stageName: dev_mfe_auth
   #     stageDisplayName: Dev environment ${{ variables.appName }}
 
-  # - template: templates/deploy-web-app-type-template.yml
-  #   parameters:
-  #     stageName: deploy_mfe_host
-  #     stageDisplayName: Deploy stage ${{ variables.appName }}
+  - template: templates/deploy-web-app-type-template.yml
+    parameters:
+      stageName: deploy_mfe_auth
+      stageDisplayName: Deploy stage ${{ variables.appName }}
+      environmentName: "stage"
+      stageDependsOn: build_mfe_auth
+      deployAppName: ${{ variables.deployAppName }}

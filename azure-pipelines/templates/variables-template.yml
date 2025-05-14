@@ -20,6 +20,9 @@ parameters:
   - name: DEPLOY_APP_NAME
     type: string
     default: "mfe-host"
+  - name: DEPLOY_APP_TYPE
+    type: string
+    default: "webAppLinux"
 
 variables:
   nodeVersion: "22.x"
@@ -38,3 +41,4 @@ variables:
   appArtifactPath: ${{ parameters.APP_ARTIFACT_PATH }}
   environmentName: ${{ parameters.ENVIRONMENT_NAME }}
   deployRuntimeStack: "NODE|22-lts"
+  deployAppType: ${{ parameters.DEPLOY_APP_NAME }}

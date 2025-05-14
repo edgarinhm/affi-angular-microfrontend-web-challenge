@@ -18,6 +18,7 @@ variables:
       BUILD_PREFIX_COMMAND: "mfe-host"
       AZURE_SUBSCRIPTION: "Azure for Students(1)(121f6adb-a21e-4a35-a892-c1609c3b5952)"
       DEPLOY_APP_NAME: "affi-challenge-web"
+      DEPLOY_APP_TYPE: "webApp"
 
 pool:
   vmImage: $(vmImageName)
