@@ -1,4 +1,10 @@
 parameters:
+  - name: stageName
+    type: string
+    default: "Build dev"
+  - name: stageDisplayName
+    type: string
+    default: "Dev"
   - name: set_env
     type: stepList
     default: []
