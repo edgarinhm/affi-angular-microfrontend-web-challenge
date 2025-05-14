@@ -4,19 +4,23 @@ stages:
     dependsOn: build
     condition: succeeded()
     jobs:
-      - deployment: Deploy
+      - deployment: DeployWebApp
         displayName: Deploy
         environment: ${{ parameters.environmentName}}
         strategy:
           runOnce:
             deploy:
               steps:
+                - task: DownloadPipelineArtifact@2
+                  inputs:
+                    buildType: "current"
+                    artifactName: "drop"
+                    targetPath: "$(System.DefaultWorkingDirectory)"
                 - task: AzureWebApp@1
                   displayName: "Azure Web App Deploy: ${{ parameters.appName }}"
                   inputs:
                     azureSubscription: $(azureSubscription)
                     appType: webAppLinux
                     appName: $(appName)
-                    runtimeStack: "NODE|$(nodeVersion)"
                     package: $(Pipeline.Workspace)/drop/${{ parameters.appArtifactPath }}-$(Build.BuildId).zip
-                    startUpCommand: "npm start"
+                    runtimeStack: $(deployRuntimeStack)

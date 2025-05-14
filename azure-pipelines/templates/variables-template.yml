@@ -14,6 +14,9 @@ parameters:
   - name: BUILD_PREFIX_COMMAND
     type: string
     default: "mfe-host"
+  - name: AZURE_SUBSCRIPTION
+    type: string
+    default: "mfe-host"
 
 variables:
   nodeVersion: "22.x"
@@ -24,9 +27,10 @@ variables:
   tag: $(Build.BuildId)
   NPM_CACHE_FOLDER: "$(Build.SourcesDirectory)/node_modules"
   NPM_CACHE_KEYS: 'npm | "$(Agent.OS)" | package-lock.json | **/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-  azureSubscription: "mfe-host"
+  azureSubscription: ${{ parameters.AZURE_SUBSCRIPTION }}
   vmImageName: "ubuntu-latest"
   appName: ${{ parameters.APP_NAME }}
   appArtifactName: ${{ parameters.APP_ARTIFACT_NAME }}
   appArtifactPath: ${{ parameters.APP_ARTIFACT_PATH }}
   environmentName: ${{ parameters.ENVIRONMENT_NAME }}
+  deployRuntimeStack: "NODE|22-lts"
