@@ -14,10 +14,10 @@ stages:
                 - task: DownloadPipelineArtifact@2
                   inputs:
                     buildType: "current"
-                    artifactName: "drop"
+                    artifactName: "drop-$(appArtifactName)"
                     targetPath: "$(System.DefaultWorkingDirectory)"
                 - task: AzureWebApp@1
-                  displayName: "Azure Web App Deploy: ${{ parameters.appName }}"
+                  displayName: "Azure Web App Deploy: $(appName)"
                   inputs:
                     azureSubscription: $(azureSubscription)
                     appType: webAppLinux
