@@ -21,13 +21,14 @@ variables:
       DEPLOY_APP_TYPE: "webApp"
 
 parameters:
-  - name: environmentVariables
-    type: object
-    default:
-      - variableName: "MS_API_URL"
-        variableValue: $(MS_API_URL)
-      - variableName: "MFE_AUTH_URL"
-        variableValue: $(MFE_AUTH_URL)
+- name: environmentVariables
+  type: object
+  default:
+  - variableName: "MS_API_URL"
+    variableValue: $(MS_API_URL)
+  - variableName: "MFE_AUTH_URL"
+    variableValue: $(MFE_AUTH_URL)
+    
 pool:
   vmImage: $(vmImageName)
 
