@@ -28,9 +28,11 @@ stages:
     parameters:
       stageName: build_mfe_host
       stageDisplayName: ${{ variables.appName }}
-      env:
-        MS_API_URL: $(MS_API_URL)
-        MFE_AUTH_URL: $(MFE_AUTH_URL)
+      environmentVariables:
+        - variableName: "MS_API_URL"
+          variableVaule: $(MS_API_URL)
+        - variableName: "MFE_AUTH_URL"
+          variableVaule: $(MFE_AUTH_URL)
 
   # - template: templates/deploy-function-type-template.yml
   #   parameters:
