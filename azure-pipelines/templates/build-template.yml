@@ -1,10 +1,10 @@
-# parameters:
-#   - name: set_env
-#     type: stepList
-#     default: []
-#   - name: environmentVariables
-#     type: object
-#     default: []
+parameters:
+  - name: set_env
+    type: stepList
+    default: []
+  - name: environmentVariables
+    type: object
+    default: []
 
 stages:
   - stage: ${{ parameters.stageName }}
