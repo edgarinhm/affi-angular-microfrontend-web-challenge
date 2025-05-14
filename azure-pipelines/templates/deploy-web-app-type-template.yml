@@ -1,7 +1,7 @@
 stages:
   - stage: ${{ parameters.stageName }}
     displayName: ${{ parameters.stageDisplayName }}
-    dependsOn: build
+    dependsOn: ${{ parameters.stageDependsOn}}
     condition: succeeded()
     jobs:
       - deployment: DeployWebApp
@@ -19,7 +19,7 @@ stages:
                 - task: AzureWebApp@1
                   displayName: "Azure Web App Deploy: $(appName)"
                   inputs:
-                    azureSubscription: $(azureSubscription)
+                    azureSubscription: $(appAzureSubscription)
                     appType: webAppLinux
                     appName: $(appName)
                     package: $(Pipeline.Workspace)/drop/${{ parameters.appArtifactPath }}-$(Build.BuildId).zip

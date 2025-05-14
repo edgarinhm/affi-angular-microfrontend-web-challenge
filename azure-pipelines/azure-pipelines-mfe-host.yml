@@ -16,7 +16,7 @@ variables:
       APP_ARTIFACT_PATH: "mfe-host"
       ENVIRONMENT_NAME: "mfe-host"
       BUILD_PREFIX_COMMAND: "mfe-host"
-      AZURE_SUBSCRIPTION: $(AZURE_SUBSCRIPTION)
+      AZURE_SUBSCRIPTION: "Azure for Students(1)(121f6adb-a21e-4a35-a892-c1609c3b5952)"
 
 pool:
   vmImage: $(vmImageName)
@@ -40,3 +40,4 @@ stages:
       stageName: deploy_mfe_host
       stageDisplayName: Deploy stage ${{ variables.appName }}
       environmentName: "stage"
+      stageDependsOn: build_mfe_host

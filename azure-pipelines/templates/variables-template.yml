@@ -27,7 +27,7 @@ variables:
   tag: $(Build.BuildId)
   NPM_CACHE_FOLDER: "$(Build.SourcesDirectory)/node_modules"
   NPM_CACHE_KEYS: 'npm | "$(Agent.OS)" | package-lock.json | **/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-  azureSubscription: ${{ parameters.AZURE_SUBSCRIPTION }}
+  appAzureSubscription: ${{ parameters.AZURE_SUBSCRIPTION }}
   vmImageName: "ubuntu-latest"
   appName: ${{ parameters.APP_NAME }}
   appArtifactName: ${{ parameters.APP_ARTIFACT_NAME }}
