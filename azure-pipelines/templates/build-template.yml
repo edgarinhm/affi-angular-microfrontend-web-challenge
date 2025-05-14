@@ -11,6 +11,9 @@ parameters:
   - name: environmentVariables
     type: object
     default: []
+  - name: env
+    type: object
+    default: []
 
 stages:
   - stage: ${{ parameters.stageName }}
