@@ -20,14 +20,14 @@ variables:
       DEPLOY_APP_NAME: "affi-challenge-web"
       DEPLOY_APP_TYPE: "webApp"
 
-parameters:
-  - name: environmentVariables
-    type: object
-    default:
-      - variableName: "MS_API_URL"
-        variableValue: $(MS_API_URL)
-      - variableName: "MFE_AUTH_URL"
-        variableValue: $(MFE_AUTH_URL)
+# parameters:
+#   - name: environmentVariables
+#     type: object
+#     default:
+#       - variableName: "MS_API_URL"
+#         variableValue: $(MS_API_URL)
+#       - variableName: "MFE_AUTH_URL"
+#         variableValue: $(MFE_AUTH_URL)
 
 pool:
   vmImage: $(vmImageName)
@@ -37,7 +37,7 @@ stages:
     parameters:
       stageName: build_mfe_host
       stageDisplayName: ${{ variables.appName }}
-      environmentVariables: ${{ parameters.environmentVariables }}
+      # environmentVariables: ${{ parameters.environmentVariables }}
       # set_env:
       #   # - script: echo "##vso[task.setvariable variable=MFE_AUTH_URL]$(MFE_AUTH_URL)"
       #   #   displayName: "set env MFE_AUTH_URL"
