@@ -1,3 +1,11 @@
+parameters:
+  - name: set_env
+    type: stepList
+    default: []
+  - name: environmentVariables
+    type: object
+    default: []
+
 stages:
   - stage: ${{ parameters.stageName }}
     displayName: Build and publish artifact ${{ parameters.stageDisplayName }}
@@ -7,18 +15,6 @@ stages:
       - job: build
         displayName: Build  ${{ parameters.stageDisplayName }}
         steps:
-          - ${{ each parameter in parameters }}:
-              - script: echo ${{ parameter.Key }}
-              - script: echo ${{ parameter.Value }}
-            displayName: "Set Environment Variable"
-
-          # - ${{ each customEnv in parameters.environmentVariables }}:
-          #     - script: echo "Setting variable ${{ customEnv.variableName }}"
-          #       # - script: |
-          #       #     echo "Setting variable ${{ customEnv.variableName }}"
-          #       #     echo "##vso[task.setvariable variable=${{ customEnv.variableName}};]${{ customEnv.variableValue }}"
-          #   displayName: "Set Environment Variable"
-
           # Install node
           - task: NodeTool@0
             displayName: "Install Node.js $(nodeVersion)"
@@ -41,8 +37,18 @@ stages:
               npm ci
             displayName: "Angular CLI $(angularCliVersion) and Install dependencies"
 
-          - script: $(appBuildCommandProd)
-            displayName: "Build $(appName)"
+          - ${{ each step in parameters.set_env }}:
+              - ${{ step }}
+
+          # - ${{ each customEnv in parameters.environmentVariables }}:
+          #     - script: echo "Setting variable ${{ customEnv.variableName }}"
+          #       # - script: |
+          #       #     echo "Setting variable ${{ customEnv.variableName }}"
+          #       #     echo "##vso[task.setvariable variable=${{ customEnv.variableName}};]${{ customEnv.variableValue }}"
+          #   displayName: "Set Environment Variable"
+
+          # - script: $(appBuildCommandProd)
+          #   displayName: "Build $(appName)"
 
           # Archive build artifacts
           - task: ArchiveFiles@2
