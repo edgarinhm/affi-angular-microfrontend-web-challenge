@@ -14,15 +14,22 @@ const getDevPort = (appName) => {
 
 // Define remote URLs based on environment
 const getLocalUrl = (appName) => {
-  return `http://localhost:${getDevPort(appName)}/remoteEntry.js`
+  return `http://localhost:${getDevPort(appName)}`
 };
+
+const getRemoteUrl = (appName) => {
+  const remoteUrls = {
+    mfeAuth: process.env.MFE_AUTH_URL
+  }
+  return `${remoteUrls[appName] || getLocalUrl(appName)}/remoteEntry.js`;
+}
 
 module.exports = withModuleFederationPlugin({
 
   name: 'mfe-host',
 
   remotes: {
-    mfeAuth: process.env.MFE_AUTH_URL || `${getLocalUrl('mfeAuth')}`,
+    mfeAuth: getRemoteUrl('mfeAuth'),
   },
 
   shared: {
