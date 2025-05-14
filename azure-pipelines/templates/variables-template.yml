@@ -17,6 +17,9 @@ parameters:
   - name: AZURE_SUBSCRIPTION
     type: string
     default: "mfe-host"
+  - name: DEPLOY_APP_NAME
+    type: string
+    default: "mfe-host"
 
 variables:
   nodeVersion: "22.x"
@@ -30,6 +33,7 @@ variables:
   appAzureSubscription: ${{ parameters.AZURE_SUBSCRIPTION }}
   vmImageName: "ubuntu-latest"
   appName: ${{ parameters.APP_NAME }}
+  deployAppName: ${{ parameters.DEPLOY_APP_NAME }}
   appArtifactName: ${{ parameters.APP_ARTIFACT_NAME }}
   appArtifactPath: ${{ parameters.APP_ARTIFACT_PATH }}
   environmentName: ${{ parameters.ENVIRONMENT_NAME }}
