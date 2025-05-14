@@ -5,17 +5,17 @@ stages:
     condition: succeeded()
     jobs:
       - deployment: DeployWebApp
-        displayName: "Deploy ${{ parameters.appName }}"
+        displayName: "Deploy $(webAppName)"
         environment: ${{ parameters.environmentName}}
         strategy:
           runOnce:
             deploy:
               steps:
                 - task: AzureWebApp@1
-                  displayName: "Azure Web App Deploy: $(appName)"
+                  displayName: "Azure Web App Deploy: $(webAppName)"
                   inputs:
                     azureSubscription: $(appAzureSubscription)
                     appType: webAppLinux
-                    appName: $(appName)
+                    appName: $(webAppName)
                     package: $(Pipeline.Workspace)/drop/${{ parameters.appArtifactPath }}-$(Build.BuildId).zip
                     runtimeStack: $(deployRuntimeStack)
