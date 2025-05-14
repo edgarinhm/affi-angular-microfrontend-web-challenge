@@ -116,6 +116,29 @@ module.exports = withModuleFederationPlugin({
 
 ```
 
+## Azure pipelines
+
+The basic flow of working with pipelines:
+![pipeline-workflow-diagram](architecture/pipeline-workflow-diagram.svg)
+
+There are 2 main stages:
+
+1. Build — build the application, can run linting, tests, etc. Result here — artifacts with application to run or do deployment.
+2. Deploy — place the application artifacts to hosted location.
+
+There are different concepts inside but very short:
+
+- pipeline can contain stages
+- stages can be executed one by one
+- stage can depends on previous stage(-s)
+- each stage can contain jobs
+- jobs can be executed in parallel
+- each job can contain steps
+- step is the basic operation to do (like install packages, build, publish, etc.)
+- step is the task from the list of available tasks with parameters
+
+![pipeline-components-diagram](architecture/pipeline-components-diagram.svg)
+
 ## Development server
 
 To start a local development server, run:
