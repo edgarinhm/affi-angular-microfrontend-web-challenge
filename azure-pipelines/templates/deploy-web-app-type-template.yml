@@ -5,7 +5,7 @@ stages:
     condition: succeeded()
     jobs:
       - deployment: DeployWebApp
-        displayName: "Deploy $(deployAppName)"
+        displayName: "Deploy ${{ parameters.deployAppName }}"
         environment: ${{ parameters.environmentName}}
         strategy:
           runOnce:
