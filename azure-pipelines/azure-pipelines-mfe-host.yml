@@ -28,11 +28,6 @@ stages:
     parameters:
       stageName: build_mfe_host
       stageDisplayName: ${{ variables.appName }}
-      # set_env:
-      #   - script: $(appBuildCommandProd)
-      #     displayName: "Build ${{ variables.appName }}"
-      #     env:
-      #       MFE_AUTH_URL: $(MFE_AUTH_URL)
       env:
         MFE_AUTH_URL: $(MFE_AUTH_URL)
 
