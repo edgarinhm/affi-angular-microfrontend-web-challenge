@@ -5,17 +5,12 @@ stages:
     condition: succeeded()
     jobs:
       - deployment: DeployWebApp
-        displayName: "Deploy $(appName)"
+        displayName: "Deploy ${{ parameters.appName }}"
         environment: ${{ parameters.environmentName}}
         strategy:
           runOnce:
             deploy:
               steps:
-                - task: DownloadPipelineArtifact@2
-                  inputs:
-                    buildType: "current"
-                    artifactName: "drop-$(appArtifactName)"
-                    targetPath: "$(System.DefaultWorkingDirectory)"
                 - task: AzureWebApp@1
                   displayName: "Azure Web App Deploy: $(appName)"
                   inputs:

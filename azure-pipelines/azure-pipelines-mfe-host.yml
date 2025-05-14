@@ -39,5 +39,6 @@ stages:
     parameters:
       stageName: deploy_mfe_host
       stageDisplayName: Deploy stage ${{ variables.appName }}
+      appName: ${{ variables.appName }}
       environmentName: "stage"
       stageDependsOn: build_mfe_host
