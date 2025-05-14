@@ -27,7 +27,7 @@ stages:
       stageDisplayName: ${{ variables.appName }}
       env:
         MS_API_URL: $(MS_API_URL)
-        MF_AUTH_URL: $(MF_AUTH_URL)
+        MFE_AUTH_URL: $(MFE_AUTH_URL)
 
   # - template: templates/deploy-function-type-template.yml
   #   parameters:
