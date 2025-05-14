@@ -139,6 +139,14 @@ There are different concepts inside but very short:
 
 ![pipeline-components-diagram](architecture/pipeline-components-diagram.png)
 
+To prepare pipeline need to do some steps:
+
+1. Create the repository — in this point we already have the one.
+2. Create the environments — prepare the configuration for environment definitions to deploy the application, configure them (like approvals, etc.)
+3. Create the library with variable groups — to use variables in the pipeline and can be edit without code changes.
+4. Create the pipeline — prepare files in the repo and select them for new pipeline.
+5. Configure security — access to the library, pipeline permissions for environment to able to consume them.
+
 ## Development server
 
 To start a local development server, run:
