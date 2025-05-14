@@ -42,13 +42,6 @@ stages:
               archiveFile: "$(Build.ArtifactStagingDirectory)/build/$(appArtifactPath)-$(Build.BuildId).zip"
               replaceExistingArchive: true
 
-          # - job: publish
-          #   displayName: Publish ${{ parameters.stageDisplayName }}
-          #   dependsOn: build
-          #   #pool:
-          #   steps:
-          #     # Prevent checking out any source code
-          #     - checkout: none
           # Publish build artifacts
           - task: PublishBuildArtifacts@1
             displayName: "Publish Artifacts $(appArtifactName)"
