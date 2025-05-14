@@ -7,6 +7,13 @@ stages:
       - job: build
         displayName: Build  ${{ parameters.stageDisplayName }}
         steps:
+          - ${{ each customEnv in parameters.environmentVariables }}:
+              - script: echo "Setting variable ${{ customEnv.variableName }}"
+                # - script: |
+                #     echo "Setting variable ${{ customEnv.variableName }}"
+                #     echo "##vso[task.setvariable variable=${{ customEnv.variableName}};]${{ customEnv.variableValue }}"
+            displayName: "Set Environment Variable"
+
           # Install node
           - task: NodeTool@0
             displayName: "Install Node.js $(nodeVersion)"
@@ -28,13 +35,6 @@ stages:
               npm install -g @angular/cli@$(angularCliVersion)
               npm ci
             displayName: "Angular CLI $(angularCliVersion) and Install dependencies"
-
-          - ${{ each customEnv in parameters.environmentVariables }}:
-              - script: echo "Setting variable ${{ customEnv.variableName }}"
-                # - script: |
-                #     echo "Setting variable ${{ customEnv.variableName }}"
-                #     echo "##vso[task.setvariable variable=${{ customEnv.variableName}};]${{ customEnv.variableValue }}"
-            displayName: "Set Environment Variable"
 
           - script: $(appBuildCommandProd)
             displayName: "Build $(appName)"
