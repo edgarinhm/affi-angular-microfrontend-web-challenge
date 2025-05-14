@@ -20,6 +20,14 @@ variables:
       DEPLOY_APP_NAME: "affi-challenge-web"
       DEPLOY_APP_TYPE: "webApp"
 
+parameters:
+  - name: environmentVariables
+    type: object
+    default:
+      - variableName: "MS_API_URL"
+        variableVaule: $(MS_API_URL)
+      - variableName: "MFE_AUTH_URL"
+        variableVaule: $(MFE_AUTH_URL)
 pool:
   vmImage: $(vmImageName)
 
@@ -28,11 +36,7 @@ stages:
     parameters:
       stageName: build_mfe_host
       stageDisplayName: ${{ variables.appName }}
-      environmentVariables:
-        - variableName: "MS_API_URL"
-          variableVaule: $(MS_API_URL)
-        - variableName: "MFE_AUTH_URL"
-          variableVaule: $(MFE_AUTH_URL)
+      environmentVariables: $(environmentVariables)
 
   # - template: templates/deploy-function-type-template.yml
   #   parameters:
