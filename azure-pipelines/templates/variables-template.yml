@@ -28,8 +28,8 @@ variables:
   nodeVersion: "22.x"
   angularCliVersion: "19.2.10"
   npmRegistryURL: "https://registry.npmjs.org/"
-  appBuildCommandDev: "npm run build:${{ parameters.BUILD_PREFIX_COMMAND }} -- --configuration=development"
-  appBuildCommandProd: "npm run build:${{ parameters.BUILD_PREFIX_COMMAND }} -- --configuration=production"
+  appBuildCommandDev: "npm run build:${{ parameters.BUILD_PREFIX_COMMAND }} -- --configuration=development --base-href=/"
+  appBuildCommandProd: "npm run build:${{ parameters.BUILD_PREFIX_COMMAND }} -- --configuration=production --base-href=/"
   tag: $(Build.BuildId)
   NPM_CACHE_FOLDER: "$(Build.SourcesDirectory)/node_modules"
   NPM_CACHE_KEYS: 'npm | "$(Agent.OS)" | package-lock.json | **/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
