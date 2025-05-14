@@ -1,0 +1,40 @@
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+      - fix/*
+  paths:
+    include:
+      - "mfe-host/*"
+
+variables:
+  - template: templates/variables-template.yml
+    parameters:
+      APP_NAME: "mfe-host"
+      APP_ARTIFACT_NAME: "mfe-host"
+      APP_ARTIFACT_PATH: "mfe-host"
+      ENVIRONMENT_NAME: "mfe-host"
+      BUILD_PREFIX_COMMAND: "mfe-host"
+
+pool:
+  vmImage: $(vmImageName)
+
+stages:
+  - template: templates/build-template.yml
+    parameters:
+      stageName: build_mfe_host
+      stageDisplayName: ${{ variables.appName }}
+      env:
+        MS_API_URL: $(MS_API_URL)
+        MF_AUTH_URL: $(MF_AUTH_URL)
+
+  # - template: templates/deploy-function-type-template.yml
+  #   parameters:
+  #     stageName: dev_mfe_host
+  #     stageDisplayName: Dev environment ${{ variables.appName }}
+
+  # - template: templates/deploy-web-app-type-template.yml
+  #   parameters:
+  #     stageName: deploy_mfe_host
+  #     stageDisplayName: Deploy stage ${{ variables.appName }}
