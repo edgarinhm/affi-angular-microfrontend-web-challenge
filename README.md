@@ -1,5 +1,11 @@
 # Demo Microfront Angular 19 with Module Federate - Mono Repo approach (projects in one workspace)
 
+Demo: <https://affi-challenge-web-hugnhuh8d3bxbrfn.eastus2-01.azurewebsites.net/>
+
+Screenshot:
+![image](https://github.com/user-attachments/assets/29e1201e-56b7-4dce-a811-e3e88552ba04)
+
+
 This project uses Angular version 19.0.6 and NodeJS version 22.12.0.
 
 We'll create the workspace.
