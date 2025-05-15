@@ -130,9 +130,7 @@ Here will be discussed the next topics:
 
 #### 1.1 Azure Resource Group
 
-To create the new resource need to go to the portal.azure.com, create the new Resource Group, create App Service Plan, App Service, all in this group. Copy the name or remember because it need to be used later in variables go specify where 
-
-to deploy the application.
+To create the new resource need to go to the portal.azure.com, create the new Resource Group, create App Service Plan, App Service, all in this group. Copy the name or remember because it need to be used later in variables go specify where to deploy the application.
 
 Suggestion here is to use strong naming convention for group and all resources. For some services like storage account it need to be without spaces and other special characters. So would be good to read documentation and articles on this topic.
 
@@ -157,14 +155,6 @@ To add the new need to select “New service connection” → “Azure Resource
 ![azure-service-connection-2.png](architecture/azure-service-connection-2.png)
 
 ### 3. Azure Pipeline
-
-#### 3.1 Azure DevOps Environment
-
-To deploy from Pipeline we need to configure list of environments to be used to do deployment jobs — special job type to handle environment configurations.
-
-To create the new environment need to go to the “Project” → “Pipelines” → “Environments” and click “Create Environment” button.
-
-![azure-environment](architecture/azure-environment.png)
 
 The basic flow of working with pipelines:
 ![pipeline-workflow-diagram](architecture/pipeline-workflow-diagram.png)
@@ -194,6 +184,52 @@ To prepare pipeline need to do some steps:
 3. Create the library with variable groups — to use variables in the pipeline and can be edit without code changes.
 4. Create the pipeline — prepare files in the repo and select them for new pipeline.
 5. Configure security — access to the library, pipeline permissions for environment to able to consume them.
+
+#### 3.1 Azure DevOps Environment
+
+To deploy from Pipeline we need to configure list of environments to be used to do deployment jobs — special job type to handle environment configurations.
+
+To create the new environment need to go to the “Project” → “Pipelines” → “Environments” and click “Create Environment” button.
+
+![azure-environment](architecture/azure-environment.png)
+
+After this we can see list of them and with latest statuses (if already deployed something).
+
+![azure-stage-environment](architecture/azure-stage-environment.png)
+
+You can also configure that in order to be deployed to some of these environments, someone needs to approve. For example, let’s create this configuration to say that in order to deploy to the “stage” environment, some user must approve it. In order to do that, click in the stage environment and go to the configuration → “Approvals and checks”.
+
+![azure-stage-env-check](architecture/azure-stage-env-check.png)
+
+#### 3.2 Create the pipeline
+
+First we need to create the files with the logic and code. After this configure pipeline and select appropriate file from the repository — azure-pilelines.yml.
+
+#### 3.3 Code for pipeline
+
+Sample pipeline for .NET application contains few files in the repo. All the files placed in the **azure-pipelines** folder in the repository root with solution and some other folders and items.
+
+![azure-pipeline-code-folder](architecture/azure-pipeline-code-folder.png)
+
+Pipeline with stages: Build and Deploy used here.
+
+Files in this sample (as template):
+
+- azure-pipelines-mfe-host.yml — main host file to provide the structure and workflow.
+- azure-pipelines-mfe-auth.yml — main remote file to provide the structure and workflow.
+- templates/build-template.yml — template to define the build steps and what the jobs need to run.
+- templates/deploy-function-type-template.yml — template for deployment stuff, define jobs and rules.
+- templates/deploy-web-app-type-template.yml — template file with common steps to deploy application to Azure App Service from the package (.zip archive).
+- templates/variables-template.yml — template to define the variables and parameters what the jobs need to run. **this can be replaced with pipeline library variable group**
+
+## Links
+
+1. <https://learn.microsoft.com/en-us/azure/app-service/>
+2. <https://learn.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops>
+3. <https://learn.microsoft.com/en-us/azure/devops/pipelines/get-started/pipelines-get-started?view=azure-devops>
+4. <https://learn.microsoft.com/en-us/azure/devops/pipelines/process/templates?view=azure-devops>
+5. <https://medium.com/@digiman89/use-azure-pipelines-to-deploy-net-application-to-azure-app-service-29a08906e3ae> -sample for .NET application to Azure App Service built with Azure Pipeline.
+6. <https://henriquesd.medium.com/deploying-an-angular-application-with-azure-pipelines-7c820116085f> -sample for Angular web application built with Azure Pipeline.
 
 ## Development server
 
