@@ -148,6 +148,14 @@ To use deployment functionality it need to configure the service connection to u
 
 This is required thing that need to be done before creating the pipelines for deployment!
 
+![azure-service-connection-1.png](architecture/azure-service-connection-1.png)
+
+To add the new connection it need to have the Azure account, usually it Microsoft account for all services (DevOps, Azure, etc.).
+
+To add the new need to select “New service connection” → “Azure Resource Manager”. Other ones also can be used but mostly for old and more custom things with manual configuration. Depending on the permissions you have and it may be vary configuration options.
+
+![azure-service-connection-2.png](architecture/azure-service-connection-2.png)
+
 ### 3. Azure Pipeline
 
 #### 3.1 Azure DevOps Environment
